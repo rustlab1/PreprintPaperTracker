@@ -3,412 +3,224 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Preprint-to-Publication Browser</title>
+<title>Preprint to Publication</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
   body {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-    color: #1F2937;
-    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 240px);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    color: #222;
+    background: #FAFAFA;
     line-height: 1.55;
-    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
-    color: white;
-    padding: 28px 32px 24px;
-    box-shadow: 0 4px 24px rgba(30, 58, 138, 0.18);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-row { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-  h1 {
-    font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
-    flex: 0 0 auto;
-  }
-  .stats { font-size: 13px; opacity: 0.85; flex: 0 0 auto; }
-  .search-wrap { flex: 1 1 380px; min-width: 240px; }
-  #q {
-    width: 100%; padding: 12px 16px; border-radius: 10px;
-    border: none; font-size: 15px; font-family: inherit;
-    background: rgba(255,255,255,0.95); color: #1F2937;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
-  #q::placeholder { color: #94A3B8; }
-  #q:focus { outline: 2px solid #FBBF24; outline-offset: 2px; }
-  .filters {
-    max-width: 1400px; margin: 16px auto 0;
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .filter-group {
-    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-    padding: 6px 10px; background: rgba(255,255,255,0.08);
-    border-radius: 8px;
-  }
-  .filter-group span.lbl {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.05em; opacity: 0.75; margin-right: 4px;
-  }
-  .chip {
-    padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600;
-    cursor: pointer; user-select: none;
-    background: rgba(255,255,255,0.18); color: white;
-    border: 1px solid rgba(255,255,255,0.25);
-    transition: all 0.15s;
-  }
-  .chip:hover { background: rgba(255,255,255,0.32); }
-  .chip.active { background: white; color: #1E3A8A; border-color: white; }
-  select.chip {
-    appearance: none; padding-right: 24px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><path d="M2 4l3 3 3-3" stroke="white" stroke-width="1.5" fill="none"/></svg>');
-    background-repeat: no-repeat; background-position: right 6px center;
-  }
-  select.chip option { background: #1E3A8A; color: white; }
 
-  main {
-    max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px;
-  }
-  .meta-line { color: #64748B; font-size: 14px; margin-bottom: 16px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
-
-  .card {
+  /* Top nav */
+  nav.top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 48px;
+    border-bottom: 1px solid #EBEBEB;
     background: white;
-    border-radius: 12px; padding: 18px 20px;
-    box-shadow: 0 2px 10px rgba(30, 58, 138, 0.06);
-    border: 1px solid #E2E8F0;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex; flex-direction: column; gap: 8px;
+  }
+  nav.top .brand {
+    font-size: 20px; font-weight: 700; color: #1E3A8A; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  nav.top .brand .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B6B 0%, #1E3A8A 100%);
+  }
+  nav.top .links { display: flex; gap: 28px; }
+  nav.top .links a {
+    color: #555; text-decoration: none; font-size: 14px; font-weight: 500;
+    padding: 6px 0; transition: color 0.15s;
+  }
+  nav.top .links a:hover { color: #1E3A8A; }
+
+  /* Hero */
+  .hero {
+    text-align: center; padding: 100px 32px 80px;
+    max-width: 900px; margin: 0 auto;
+  }
+  .pill {
+    display: inline-block; padding: 7px 14px;
+    background: #FFF5F5; color: #FF6B6B;
+    border: 1px solid #FFE3E3;
+    border-radius: 999px; font-size: 13px; font-weight: 600;
+    letter-spacing: 0.02em; margin-bottom: 24px;
+  }
+  h1 {
+    font-size: 56px; font-weight: 800; letter-spacing: -0.03em;
+    color: #222; line-height: 1.08; margin-bottom: 20px;
+  }
+  h1 .accent { color: #1E3A8A; }
+  .subtitle {
+    font-size: 19px; color: #555; max-width: 640px;
+    margin: 0 auto 12px; font-weight: 400;
+  }
+  .meta-line { font-size: 14px; color: #999; margin-top: 8px; }
+
+  /* Cards grid */
+  .cards {
+    max-width: 1100px; margin: 40px auto 80px; padding: 0 32px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: white; border-radius: 16px; padding: 36px 32px;
+    border: 1px solid #EBEBEB;
+    transition: all 0.2s ease;
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; min-height: 280px;
+    position: relative; overflow: hidden;
   }
   .card:hover {
-    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.12);
-    transform: translateY(-1px); border-color: #CBD5E1;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    border-color: #DDD;
   }
-  .card .id { font-size: 11px; color: #94A3B8; letter-spacing: 0.05em; font-weight: 500; }
-  .card .title {
-    font-size: 15px; font-weight: 600; color: #1F2937; line-height: 1.35;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    overflow: hidden;
+  .card-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px; font-size: 28px;
   }
-  .card .auth {
-    font-size: 13px; color: #475569; font-style: italic;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  .card.browse .card-icon { background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%); }
+  .card.findings .card-icon { background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%); }
+  .card.about .card-icon { background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); }
+  .card-title {
+    font-size: 22px; font-weight: 700; margin-bottom: 10px;
+    letter-spacing: -0.01em; color: #222;
   }
-  .card .journal {
-    font-size: 13px; color: #1E3A8A; font-weight: 500;
+  .card-desc {
+    font-size: 15px; color: #666; line-height: 1.6;
+    flex: 1;
   }
-  .card-foot { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: auto; padding-top: 6px; }
-  .badge {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.04em; padding: 3px 8px; border-radius: 4px;
+  .card-cta {
+    margin-top: 22px; font-size: 14px; font-weight: 600;
+    color: #1E3A8A; display: flex; align-items: center; gap: 6px;
   }
-  .b-unchanged { background: #F1F5F9; color: #475569; }
-  .b-minor { background: #FEF3C7; color: #92400E; }
-  .b-major { background: #FEE2E2; color: #991B1B; }
-  .b-strengthened { background: #D1FAE5; color: #065F46; }
-  .b-weakened { background: #FED7AA; color: #9A3412; }
-  .b-cat { background: #DBEAFE; color: #1E40AF; }
-  .b-yr { background: #E0E7FF; color: #3730A3; }
-  .b-rt { background: #FECACA; color: #991B1B; border: 1px solid #DC2626; }
-  .b-tc { background: #F3E8FF; color: #6B21A8; }
+  .card-cta .arrow {
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .card:hover .card-cta .arrow { transform: translateX(4px); }
 
-  /* Modal */
-  .modal-bg {
-    position: fixed; inset: 0;
-    background: rgba(15, 23, 42, 0.72);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    display: none; align-items: center; justify-content: center; padding: 24px;
+  /* Stats strip */
+  .stats-strip {
+    background: white;
+    border-top: 1px solid #EBEBEB;
+    border-bottom: 1px solid #EBEBEB;
+    padding: 48px 32px;
   }
-  .modal-bg.show { display: flex; }
-  .modal {
-    background: white; border-radius: 16px; max-width: 1000px; width: 100%;
-    max-height: 92vh; overflow-y: auto;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.3);
-    padding: 28px 32px;
+  .stats-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 32px; text-align: center;
   }
-  .close-btn {
-    position: absolute; top: 14px; right: 14px;
-    width: 32px; height: 32px; border-radius: 8px;
-    background: #F1F5F9; border: none; cursor: pointer; font-size: 20px;
-    color: #475569;
+  .stat-num {
+    font-size: 40px; font-weight: 800; color: #1E3A8A;
+    letter-spacing: -0.02em; line-height: 1;
   }
-  .close-btn:hover { background: #E2E8F0; }
-  .modal h2 { font-size: 22px; font-weight: 700; color: #1E3A8A; margin-bottom: 6px; line-height: 1.3; }
-  .modal .ah { color: #475569; font-size: 14px; margin-bottom: 4px; }
-  .modal .meta { color: #64748B; font-size: 13px; margin-bottom: 16px; }
-  .modal a { color: #1E3A8A; text-decoration: underline; }
-  .modal .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 18px; }
-  .compare {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;
+  .stat-label {
+    font-size: 13px; color: #777; font-weight: 500;
+    margin-top: 8px; text-transform: uppercase; letter-spacing: 0.05em;
   }
-  .col {
-    background: #F8FAFC; border-radius: 10px; padding: 14px 16px;
-    border: 1px solid #E2E8F0;
+
+  /* Footer */
+  footer {
+    text-align: center; padding: 36px 32px 48px;
+    color: #999; font-size: 13px; line-height: 1.7;
   }
-  .col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-  .col.pre h4 { color: #0891B2; }
-  .col.pub h4 { color: #DC2626; }
-  .col p { font-size: 14px; line-height: 1.5; color: #1F2937; }
-  .col .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 8px; color: #64748B; }
-  .reason {
-    background: #FEF3C7; border-left: 4px solid #F59E0B;
-    padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #78350F; margin-top: 16px; line-height: 1.5;
+  footer a { color: #1E3A8A; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 38px; }
+    .hero { padding: 60px 24px 40px; }
+    nav.top { padding: 16px 24px; }
+    nav.top .links { gap: 18px; }
   }
-  .empty { text-align: center; padding: 80px 20px; color: #94A3B8; }
-  .pagination {
-    display: flex; justify-content: center; gap: 8px; margin-top: 32px;
-  }
-  .pagination button {
-    padding: 8px 14px; border-radius: 8px; border: 1px solid #CBD5E1;
-    background: white; cursor: pointer; font-family: inherit; font-size: 13px;
-    color: #475569;
-  }
-  .pagination button:hover:not(:disabled) { background: #F1F5F9; }
-  .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
-  .pagination button.active { background: #1E3A8A; color: white; border-color: #1E3A8A; }
-  .loading { text-align: center; padding: 60px; color: #94A3B8; font-size: 14px; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-row">
-    <h1>📄 Preprint Browser</h1>
-    <div class="stats" id="stats">loading…</div>
-    <div class="search-wrap">
-      <input id="q" type="search" placeholder="Search title, author, journal, institution…" autofocus>
+<nav class="top">
+  <div class="brand"><span class="dot"></span>Preprint Tracker</div>
+  <div class="links">
+    <a href="findings.html">Findings</a>
+    <a href="browser.html">Browse</a>
+    <a href="https://github.com" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="pill">Meta-science · v7.1</div>
+  <h1>How do scientific claims change<br>between <span class="accent">preprint and publication?</span></h1>
+  <p class="subtitle">
+    A study of 3,010 bioRxiv preprints and their peer-reviewed journal versions, labeled with a locked LLM codebook validated against expert raters.
+  </p>
+  <p class="meta-line">bioRxiv 2017–2025 · Sonnet 4.6 · κ = 0.66 (Sonnet vs Opus)</p>
+</section>
+
+<section class="cards">
+  <a href="browser.html" class="card browse">
+    <div class="card-icon">🔍</div>
+    <div class="card-title">Browse the dataset</div>
+    <p class="card-desc">
+      Search and filter all 3,010 preprint–publication pairs by author, journal, category, year, or labeled change. Click any paper to see its primary claims side-by-side.
+    </p>
+    <div class="card-cta">Open browser <span class="arrow">→</span></div>
+  </a>
+
+  <a href="findings.html" class="card findings">
+    <div class="card-icon">📊</div>
+    <div class="card-title">Key findings</div>
+    <p class="card-desc">
+      Headline results from the dataset: how often claims change, which fields revise most, the spin quadrant, and the matched-cohort retraction analysis.
+    </p>
+    <div class="card-cta">See findings <span class="arrow">→</span></div>
+  </a>
+
+  <a href="https://github.com" target="_blank" class="card about">
+    <div class="card-icon">📄</div>
+    <div class="card-title">Methodology &amp; data</div>
+    <p class="card-desc">
+      Locked codebook (v7.1), reliability protocol, and all extraction scripts. Reproducible pipeline from bioRxiv DOI to structured claim labels.
+    </p>
+    <div class="card-cta">View on GitHub <span class="arrow">→</span></div>
+  </a>
+</section>
+
+<section class="stats-strip">
+  <div class="stats-grid">
+    <div>
+      <div class="stat-num">3,010</div>
+      <div class="stat-label">preprint–publication pairs</div>
+    </div>
+    <div>
+      <div class="stat-num">66%</div>
+      <div class="stat-label">claims preserved</div>
+    </div>
+    <div>
+      <div class="stat-num">27%</div>
+      <div class="stat-label">minor revision</div>
+    </div>
+    <div>
+      <div class="stat-num">7%</div>
+      <div class="stat-label">major revision</div>
+    </div>
+    <div>
+      <div class="stat-num">2.3×</div>
+      <div class="stat-label">lower retraction rate (preprinted)</div>
     </div>
   </div>
-  <div class="filters" id="filters"></div>
-</header>
+</section>
 
-<main>
-  <p class="meta-line" id="meta">Loading 3,010 papers…</p>
-  <div class="grid" id="grid"></div>
-  <div class="pagination" id="pager"></div>
-</main>
-
-<div class="modal-bg" id="modalbg">
-  <div class="modal" id="modal" style="position:relative">
-    <button class="close-btn" id="closeBtn">×</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<script>
-let DATA = [];
-let FILTERED = [];
-let PAGE = 0;
-const PAGE_SIZE = 60;
-let FILTERS = { L:'all', H:'all', cat:'all', yr:'all', tc:'all', rt:'all' };
-
-const fmtN = n => n.toLocaleString();
-
-async function load() {
-  const r = await fetch('papers.json');
-  DATA = await r.json();
-  document.getElementById('stats').textContent = `${fmtN(DATA.length)} papers · v7.1 codebook`;
-  buildFilters();
-  applyFilters();
-}
-
-function buildFilters() {
-  const cats = [...new Set(DATA.map(d=>d.cat).filter(Boolean))].sort();
-  const yrs = [...new Set(DATA.map(d=>d.yr).filter(Boolean))].sort();
-  const f = document.getElementById('filters');
-
-  const groups = [
-    { key:'L', label:'change',
-      opts:[['all','all'],['unchanged','unchanged'],['minor','minor'],['major','major']] },
-    { key:'H', label:'hedging',
-      opts:[['all','all'],['unchanged','unchanged'],['strengthened','strengthened'],['weakened','weakened'],['NA','NA']] },
-    { key:'tc', label:'type changed',
-      opts:[['all','all'],['true','yes'],['false','no']] },
-    { key:'rt', label:'retracted',
-      opts:[['all','all'],['true','yes only']] },
-  ];
-  for (const g of groups) {
-    const grp = document.createElement('div');
-    grp.className = 'filter-group';
-    grp.innerHTML = `<span class="lbl">${g.label}</span>`;
-    for (const [v, lbl] of g.opts) {
-      const btn = document.createElement('button');
-      btn.className = 'chip' + (FILTERS[g.key]===v ? ' active':'');
-      btn.textContent = lbl;
-      btn.onclick = () => {
-        FILTERS[g.key] = v;
-        grp.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        PAGE = 0;
-        applyFilters();
-      };
-      grp.appendChild(btn);
-    }
-    f.appendChild(grp);
-  }
-
-  // Category select (many values)
-  const catGrp = document.createElement('div');
-  catGrp.className = 'filter-group';
-  catGrp.innerHTML = `<span class="lbl">category</span>`;
-  const catSel = document.createElement('select');
-  catSel.className = 'chip';
-  catSel.innerHTML = `<option value="all">all</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-  catSel.onchange = () => { FILTERS.cat = catSel.value; PAGE=0; applyFilters(); };
-  catGrp.appendChild(catSel);
-  f.appendChild(catGrp);
-
-  // Year
-  const yrGrp = document.createElement('div');
-  yrGrp.className = 'filter-group';
-  yrGrp.innerHTML = `<span class="lbl">year</span>`;
-  const yrSel = document.createElement('select');
-  yrSel.className = 'chip';
-  yrSel.innerHTML = `<option value="all">all</option>` + yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
-  yrSel.onchange = () => { FILTERS.yr = yrSel.value; PAGE=0; applyFilters(); };
-  yrGrp.appendChild(yrSel);
-  f.appendChild(yrGrp);
-}
-
-function applyFilters() {
-  const q = (document.getElementById('q').value||'').trim().toLowerCase();
-  FILTERED = DATA.filter(d => {
-    if (FILTERS.L !== 'all' && d.L !== FILTERS.L) return false;
-    if (FILTERS.H !== 'all' && d.H !== FILTERS.H) return false;
-    if (FILTERS.cat !== 'all' && d.cat !== FILTERS.cat) return false;
-    if (FILTERS.yr !== 'all' && String(d.yr) !== FILTERS.yr) return false;
-    if (FILTERS.tc !== 'all' && String(!!d.tc) !== FILTERS.tc) return false;
-    if (FILTERS.rt === 'true' && !d.rt) return false;
-    if (q) {
-      const hay = (d.p_title + ' ' + d.j_title + ' ' + d.authors + ' ' + d.j + ' ' + d.inst + ' ' + d.cat + ' ' + d.id).toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
-    return true;
-  });
-  document.getElementById('meta').textContent =
-    `${fmtN(FILTERED.length)} of ${fmtN(DATA.length)} papers · click any card to expand`;
-  render();
-}
-
-function badge(text, cls) {
-  return `<span class="badge ${cls}">${text}</span>`;
-}
-
-function render() {
-  const grid = document.getElementById('grid');
-  const start = PAGE * PAGE_SIZE;
-  const slice = FILTERED.slice(start, start + PAGE_SIZE);
-  if (slice.length === 0) {
-    grid.innerHTML = '<p class="empty">No papers match your filters.</p>';
-    document.getElementById('pager').innerHTML = '';
-    return;
-  }
-  grid.innerHTML = slice.map((d, i) => {
-    const labelB = badge(d.L||'?', 'b-'+(d.L||'unchanged'));
-    const hedgeB = d.H && d.H!=='unchanged' ? badge(d.H, 'b-'+d.H) : '';
-    const tcB = d.tc ? badge('type changed', 'b-tc') : '';
-    const rtB = d.rt ? badge('RETRACTED', 'b-rt') : '';
-    return `
-      <div class="card" data-idx="${start+i}">
-        <div class="id">${d.id} · ${d.cat||'—'} · ${d.yr||''}</div>
-        <div class="title">${escapeHtml(d.p_title || d.j_title || '(no title)')}</div>
-        <div class="auth">${escapeHtml(d.fa || d.corr || 'no author info')}${d.authors && d.authors.includes(';') ? ' et al.' : ''}</div>
-        <div class="journal">${escapeHtml(d.j || '—')}${d.if ? ' · IF ' + d.if : ''}</div>
-        <div class="card-foot">${labelB}${hedgeB}${tcB}${rtB}</div>
-      </div>`;
-  }).join('');
-  grid.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => openModal(parseInt(c.dataset.idx))));
-  renderPager();
-}
-
-function renderPager() {
-  const totalPages = Math.ceil(FILTERED.length / PAGE_SIZE);
-  if (totalPages <= 1) { document.getElementById('pager').innerHTML = ''; return; }
-  const p = PAGE;
-  let html = `<button onclick="goPage(0)" ${p===0?'disabled':''}>« first</button>`;
-  html += `<button onclick="goPage(${p-1})" ${p===0?'disabled':''}>‹ prev</button>`;
-  // Show range of pages around current
-  const start = Math.max(0, p-2), end = Math.min(totalPages, p+3);
-  for (let i = start; i < end; i++) {
-    html += `<button onclick="goPage(${i})" class="${i===p?'active':''}">${i+1}</button>`;
-  }
-  html += `<button onclick="goPage(${p+1})" ${p===totalPages-1?'disabled':''}>next ›</button>`;
-  html += `<button onclick="goPage(${totalPages-1})" ${p===totalPages-1?'disabled':''}>last »</button>`;
-  document.getElementById('pager').innerHTML = html;
-}
-
-function goPage(i) {
-  PAGE = Math.max(0, Math.min(i, Math.ceil(FILTERED.length / PAGE_SIZE) - 1));
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function openModal(idx) {
-  const d = FILTERED[idx];
-  if (!d) return;
-  const labelB = badge(d.L||'?', 'b-'+(d.L||'unchanged'));
-  const hedgeB = d.H && d.H!=='unchanged' ? badge('hedging: '+d.H, 'b-'+d.H) : badge('hedging: unchanged', 'b-unchanged');
-  const tcB = d.tc ? badge('type changed', 'b-tc') : '';
-  const rtB = d.rt ? badge('RETRACTED', 'b-rt') : '';
-  const c = document.getElementById('modalContent');
-  c.innerHTML = `
-    <h2>${escapeHtml(d.j_title || d.p_title || '')}</h2>
-    <p class="ah">${escapeHtml(d.authors || 'authors not available')}</p>
-    <p class="meta">
-      ${escapeHtml(d.j || '—')}${d.yr ? ' · ' + d.yr : ''}${d.if ? ' · IF ' + d.if : ''}${d.dtp ? ' · ' + d.dtp + ' days to publication' : ''}
-      ${d.inst ? '<br><strong>Institution:</strong> ' + escapeHtml(d.inst) : ''}
-      ${d.corr ? '<br><strong>Corresponding:</strong> ' + escapeHtml(d.corr) : ''}
-    </p>
-    <p class="meta">
-      <a href="https://doi.org/${escapeHtml(d.p_doi)}" target="_blank">bioRxiv: ${escapeHtml(d.p_doi)}</a><br>
-      <a href="https://doi.org/${escapeHtml(d.j_doi)}" target="_blank">Published: ${escapeHtml(d.j_doi)}</a>
-    </p>
-    <div class="badges">${labelB}${hedgeB}${tcB}${rtB}</div>
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Primary claim</h3>
-    <div class="compare">
-      <div class="col pre">
-        <h4>Preprint</h4>
-        <p>${escapeHtml(d.pP || '—')}</p>
-        <div class="type">type: ${escapeHtml(d.preT || '?')}</div>
-      </div>
-      <div class="col pub">
-        <h4>Published</h4>
-        <p>${escapeHtml(d.jP || '—')}</p>
-        <div class="type">type: ${escapeHtml(d.pubT || '?')}</div>
-      </div>
-    </div>
-    ${d.ps1 || d.js1 ? `
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin:18px 0 6px;">Secondary claim 1 ${d.s1L ? '· '+d.s1L : ''} ${d.s1H && d.s1H!=='unchanged' ? '· '+d.s1H : ''}</h3>
-    <div class="compare">
-      <div class="col pre"><h4>Preprint</h4><p>${escapeHtml(d.ps1 || 'NA')}</p></div>
-      <div class="col pub"><h4>Published</h4><p>${escapeHtml(d.js1 || 'NA')}</p></div>
-    </div>` : ''}
-    ${d.ps2 || d.js2 ? `
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin:18px 0 6px;">Secondary claim 2 ${d.s2L ? '· '+d.s2L : ''} ${d.s2H && d.s2H!=='unchanged' ? '· '+d.s2H : ''}</h3>
-    <div class="compare">
-      <div class="col pre"><h4>Preprint</h4><p>${escapeHtml(d.ps2 || 'NA')}</p></div>
-      <div class="col pub"><h4>Published</h4><p>${escapeHtml(d.js2 || 'NA')}</p></div>
-    </div>` : ''}
-    ${d.rs ? `<div class="reason"><strong>Sonnet reasoning:</strong> ${escapeHtml(d.rs)}</div>` : ''}
-  `;
-  document.getElementById('modalbg').classList.add('show');
-}
-
-function closeModal() { document.getElementById('modalbg').classList.remove('show'); }
-
-function escapeHtml(s) {
-  if (s == null) return '';
-  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
-
-document.getElementById('q').addEventListener('input', () => { PAGE = 0; applyFilters(); });
-document.getElementById('closeBtn').addEventListener('click', closeModal);
-document.getElementById('modalbg').addEventListener('click', e => { if (e.target.id === 'modalbg') closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-load();
-</script>
+<footer>
+  <div>Sonnet v7.1 codebook · n = 3,010 pairs · bioRxiv 2017–2025</div>
+  <div style="margin-top:6px;">Built with Claude · <a href="https://github.com">source</a></div>
+</footer>
 
 </body>
 </html>
