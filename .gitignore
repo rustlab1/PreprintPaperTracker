@@ -1,0 +1,8 @@
+# Block large files and Python clutter from ever entering the repo
+*.db
+*.db-journal
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+.env
