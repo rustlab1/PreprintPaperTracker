@@ -29,7 +29,6 @@
   .head h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
   .head p{color:var(--muted);font-size:14.5px;max-width:760px}
 
-  /* search + controls */
   .toolbar{position:sticky;top:65px;z-index:40;background:var(--bg);padding:16px 0 10px;margin-top:14px}
   .searchbar{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:11px 15px;box-shadow:var(--shadow);transition:.15s}
   .searchbar:focus-within{border-color:var(--blue2);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
@@ -38,6 +37,7 @@
   .searchbar .count{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
   .hint{font-size:12px;color:var(--muted);margin:8px 2px 0}
   .hint b{color:var(--blue)}
+  .hint .flag{color:var(--coral);font-weight:600}
 
   .controls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:13px}
   .chipset{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
@@ -52,7 +52,6 @@
   .reset{font-size:12.5px;color:var(--coral);font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit}
   .reset:hover{text-decoration:underline}
 
-  /* results */
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
   @media(max-width:760px){.grid{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 17px;cursor:pointer;transition:.14s;box-shadow:var(--shadow);position:relative;overflow:hidden}
@@ -62,6 +61,8 @@
   .card h3{font-size:14.5px;font-weight:700;line-height:1.35;margin:0 0 7px;padding-left:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .card .meta{font-size:12.5px;color:var(--muted);padding-left:6px;margin-bottom:9px}
   .card .meta .j{color:var(--ink);font-weight:600}
+  .au-link{color:var(--blue2);cursor:pointer;border-bottom:1px dotted rgba(37,99,235,.4)}
+  .au-link:hover{color:var(--blue)}
   .badges{display:flex;flex-wrap:wrap;gap:5px;padding-left:6px}
   .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;letter-spacing:.01em}
   .b-unchanged{background:#e4f6ec;color:#137a47} .b-minor{background:#fdf1d8;color:#9a6800} .b-major{background:#fbe2e7;color:#b32b44}
@@ -77,7 +78,6 @@
 
   .empty{text-align:center;color:var(--muted);padding:60px 20px;font-size:15px}
 
-  /* loader */
   #loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:18px;transition:opacity .4s}
   #loader .ring{width:46px;height:46px;border:4px solid var(--sky);border-top-color:var(--blue2);border-radius:50%;animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -86,7 +86,6 @@
   #loader .ptext{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
   #loader h2{font-size:16px;font-weight:700;color:var(--blue)}
 
-  /* modal */
   .modalbg{position:fixed;inset:0;background:rgba(15,25,45,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:36px 18px;overflow-y:auto}
   .modalbg.show{display:flex}
   .modal{background:#fff;border-radius:16px;max-width:880px;width:100%;box-shadow:0 24px 70px rgba(10,20,40,.4);animation:pop .22s ease}
@@ -112,6 +111,7 @@
   .reason{background:#fffaf0;border:1px solid #f3e2c0;border-radius:11px;padding:14px 16px;margin-top:6px}
   .reason .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9a6800;margin-bottom:6px}
   .reason p{font-size:13px;line-height:1.62;color:#5c4a1e;font-family:'Newsreader',Georgia,serif}
+  .authcloud{margin-top:6px;font-size:12.5px;color:var(--muted);line-height:1.7}
   .metatable{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
   @media(max-width:640px){.metatable{grid-template-columns:1fr}}
   .metatable .row{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;border-bottom:1px dotted var(--line);padding-bottom:6px}
@@ -140,16 +140,16 @@
 <div class="wrap">
   <div class="head">
     <h1>Browse the dataset</h1>
-    <p>Every one of the 72,644 bioRxiv preprint–publication pairs, with the claim-level labels assigned by Claude Sonnet 4.6. Search the titles, authors, journals, institutions, DOIs, and the extracted primary claims, then open any pair to see the side-by-side claims and the model's reasoning.</p>
+    <p>Every one of the 72,644 bioRxiv preprint–publication pairs, with the claim-level labels assigned by Claude Sonnet 4.6. Search every author, the titles, journals, institutions, DOIs, and the extracted primary claims, then open any pair to see the side-by-side claims and the model's reasoning.</p>
   </div>
 
   <div class="toolbar">
     <div class="searchbar">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input id="q" type="search" placeholder="Search claims, titles, authors, journals, institutions, DOI…" autocomplete="off" autofocus>
+      <input id="q" type="search" placeholder="Search any author (e.g. Rust R), a claim, title, journal, institution, or DOI…" autocomplete="off" autofocus>
       <span class="count" id="count"></span>
     </div>
-    <div class="hint">Tip: try <b>microbiology</b>, <b>CRISPR</b>, <b>Nature</b>, an author, or a phrase from a claim. Filters and search combine.</div>
+    <div class="hint">Tip: search an author by surname or <b>Surname Initial</b> (e.g. <b>Rust R</b>), or click any author name to see all their pairs. Surnames match every position in the author list, not just the first author.<span class="flag" id="authflag"> · loading author index…</span></div>
 
     <div class="controls">
       <div class="chipset">
@@ -189,14 +189,14 @@
 </div>
 
 <script>
-/* ---- index schema (array-of-arrays) ----
-[0]id [1]preDOI [2]pubDOI [3]title [4]firstAuthor [5]corr [6]inst [7]cat [8]journal
-[9]year [10]daysToPub [11]impact [12]quartile [13]L(content) [14]H(hedging)
-[15]preType [16]pubType [17]typeChanged [18]s1L [19]s1H [20]s2L [21]s2H [22]pubPrimaryClaim
-   detail shard d/{id//1200}.json -> {id:[ 0 prePrimary,1 preS1,2 pubS1,3 preS2,4 pubS2,
-                                          5 reasoning,6 authors,7 preTitle,8 preDate,9 pubDate,10 pmid,11 jaccard ]} */
-const PAGE_SIZE = 24, SHARD = 1200;
-let DATA = [], BLOB = [], FILTERED = [], PAGE = 0;
+/* index schema: [0]id [1]preDOI [2]pubDOI [3]title [4]firstAuthor [5]corr [6]inst [7]cat [8]journal
+   [9]year [10]daysToPub [11]impact [12]quartile [13]L [14]H [15]preType [16]pubType [17]typeChanged
+   [18]s1L [19]s1H [20]s2L [21]s2H [22]pubPrimaryClaim
+   detail shard d/{id//1200}.json -> {id:[0 prePrimary,1 preS1,2 pubS1,3 preS2,4 pubS2,5 reasoning,
+                                          6 authors,7 preTitle,8 preDate,9 pubDate,10 pmid,11 jaccard]}
+   authors.json -> [ [surname, given], ... ] per record (lowercased; given may be initials or full names) */
+const PAGE_SIZE = 24, SHARD = 1200, INDEX_BYTES = 43466195;
+let DATA = [], BLOB = [], AUTHP = [], FILTERED = [], PAGE = 0;
 const state = { q:'', L:new Set(), H:new Set(), TC:false, cat:'', year:'', sort:'yr_desc' };
 const shardCache = {};
 const $ = s => document.querySelector(s);
@@ -205,18 +205,39 @@ const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : '';
 const TYPE = {mechanism:'Mechanism',association:'Association',descriptive:'Descriptive',method:'Method',therapeutic:'Therapeutic',null_result:'Null result'};
 const tdisp = t => TYPE[t] || cap((t||'').replace(/_/g,' '));
 
-/* streaming loader with progress */
+/* ---- author matching ---- */
+const qtok = q => (q.toLowerCase().match(/[a-z0-9]+/g) || []);
+function gmatch(qt, giv){
+  for(const g of giv.split(' ')){
+    if(!g) continue;
+    if(qt===g) return true;
+    if(qt.length===1 && g[0]===qt) return true;   // query initial vs given name/initial
+    if(g.length===1 && qt[0]===g) return true;     // query given name vs author initial
+  }
+  return false;
+}
+function amatch(qs, parsed){
+  for(const a of parsed){
+    const sur=a[0], giv=a[1]||'';
+    for(let i=0;i<qs.length;i++){
+      const c=qs[i];
+      if(c.length>=2 && c===sur){                  // surname must be >=2 chars
+        let ok=true;
+        for(let j=0;j<qs.length;j++){ if(j!==i && !gmatch(qs[j],giv)){ ok=false; break; } }
+        if(ok) return true;
+      }
+    }
+  }
+  return false;
+}
+
 async function load(){
   const res = await fetch('data/index.json');
-  // use the known uncompressed size: GitHub Pages gzips the response, so the
-  // decompressed stream we read is ~43.4 MB even though Content-Length is smaller.
-  const total = 43466195;
   const reader = res.body.getReader(); let got=0, chunks=[];
   while(true){
     const {done,value} = await reader.read(); if(done) break;
     chunks.push(value); got+=value.length;
-    const pc = Math.min(100, got/total*100);
-    $('#pfill').style.width = pc+'%';
+    $('#pfill').style.width = Math.min(100, got/INDEX_BYTES*100)+'%';
     $('#ptext').textContent = (got/1048576).toFixed(1)+' MB';
   }
   let size=0; chunks.forEach(c=>size+=c.length);
@@ -225,6 +246,11 @@ async function load(){
   BLOB = DATA.map(d => (d[3]+' '+d[4]+' '+d[5]+' '+d[6]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase());
   buildSelects(); bindUI(); apply();
   const l=$('#loader'); l.style.opacity=0; setTimeout(()=>l.style.display='none',400);
+  // author index loads in the background; full-author search switches on when ready
+  fetch('data/authors.json').then(r=>r.json()).then(a=>{
+    AUTHP=a; const f=$('#authflag'); if(f) f.style.display='none';
+    if(state.q) apply();
+  }).catch(()=>{ const f=$('#authflag'); if(f) f.style.display='none'; });
 }
 
 function buildSelects(){
@@ -235,7 +261,7 @@ function buildSelects(){
 }
 
 function bindUI(){
-  let t; $('#q').addEventListener('input', e=>{clearTimeout(t);t=setTimeout(()=>{state.q=e.target.value.trim().toLowerCase();PAGE=0;apply();},130);});
+  let t; $('#q').addEventListener('input', e=>{clearTimeout(t);t=setTimeout(()=>{state.q=e.target.value.trim();PAGE=0;apply();},130);});
   document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
     const f=ch.dataset.f, v=ch.dataset.v;
     if(f==='TC'){state.TC=!state.TC;ch.classList.toggle('on',state.TC);}
@@ -252,23 +278,27 @@ function bindUI(){
   });
   $('#modalbg').addEventListener('click',e=>{if(e.target.id==='modalbg')closeModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-  // accept ?q= from the overview search box, and ?id= deep link
   const params=new URLSearchParams(location.search);
-  const pq=params.get('q');
-  if(pq){$('#q').value=pq;state.q=pq.trim().toLowerCase();}
+  const pq=params.get('q'); if(pq){$('#q').value=pq;state.q=pq.trim();}
   const qid=params.get('id'); if(qid!==null && DATA[+qid]) openModal(+qid);
+}
+
+function searchAuthor(name){
+  closeModal();
+  $('#q').value=name; state.q=name; PAGE=0; apply();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 const ORDER={major:3,minor:2,unchanged:1};
 function apply(){
-  const q=state.q;
+  const q=state.q.toLowerCase(); const QT = q?qtok(q):[]; const useAuth = AUTHP.length>0 && QT.length>0;
   FILTERED = DATA.filter((d,i)=>{
     if(state.L.size && !state.L.has(d[13])) return false;
     if(state.H.size && !state.H.has(d[14])) return false;
     if(state.TC && d[17]!==1) return false;
     if(state.cat && d[7]!==state.cat) return false;
     if(state.year && d[9]!=state.year) return false;
-    if(q && !BLOB[i].includes(q)) return false;
+    if(q && !BLOB[i].includes(q) && !(useAuth && amatch(QT,AUTHP[i]))) return false;
     return true;
   });
   const s=state.sort;
@@ -294,14 +324,16 @@ function render(){
     const hed = d[14]==='weakened' ? '<span class="badge b-cautious">More cautious</span>'
              : d[14]==='strengthened' ? '<span class="badge b-confident">More confident</span>' : '';
     const imp = d[11]!=null ? ` · impact ${d[11]}` : '';
+    const au = d[4] ? `<span class="au-link" data-au="${esc(d[4])}">${esc(d[4])}</span>` : '';
     return `<div class="card" data-id="${d[0]}">
       <div class="stripe s-${d[13]}"></div>
       <h3>${esc(d[3])}</h3>
-      <div class="meta"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))} · ${esc(d[4]||'')}${imp}</div>
+      <div class="meta"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))} · ${au}${imp}</div>
       <div class="badges"><span class="badge b-${d[13]}">${cap(d[13])}</span>${hed}${tc}</div>
     </div>`;
   }).join('');
   grid.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>openModal(+c.dataset.id)));
+  grid.querySelectorAll('.au-link').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();searchAuthor(el.dataset.au);}));
   renderPager();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -332,19 +364,21 @@ function openModal(id){
            : d[14]==='strengthened'?'<span class="badge b-confident">Wording more confident</span>'
            : '<span class="badge b-plain">Hedging unchanged</span>';
   const tc = d[17]===1?`<span class="badge b-type">Type: ${tdisp(d[15])} → ${tdisp(d[16])}</span>`:`<span class="badge b-plain">Type: ${tdisp(d[15])}</span>`;
+  const corrLink = d[5]?`<span class="au-link" data-au="${esc(d[5])}">${esc(d[5])}</span>`:(d[4]?`<span class="au-link" data-au="${esc(d[4])}">${esc(d[4])}</span>`:'');
   const m=$('#modal');
   m.innerHTML=`
     <div class="mhead">
       <button class="close" onclick="closeModal()">×</button>
       <h2>${esc(d[3])}</h2>
       <div class="sub"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))}<br>
-        ${esc(d[5]||d[4]||'')}${d[6]?' · '+esc(d[6]):''}</div>
+        ${corrLink}${d[6]?' · '+esc(d[6]):''}</div>
     </div>
     <div class="mbody">
       <div class="mbadges">${labelBadge(d[13])}${hed}${tc}</div>
       <div id="mdetail"><div class="mload">Loading claims…</div></div>
     </div>`;
   $('#modalbg').classList.add('show');
+  bindAuthLinks(m);
   getDetail(id).then(det=>{
     const miss='<p style="color:#9aa6b5;font-style:italic">— none extracted —</p>';
     const block=(label,pre,pub,pill)=>`
@@ -359,6 +393,11 @@ function openModal(id){
     if(det&&(det[1]||det[2])) html+=block('Secondary claim 1', det[1], det[2], d[18]?cap(d[18]):'');
     if(det&&(det[3]||det[4])) html+=block('Secondary claim 2', det[3], det[4], d[20]?cap(d[20]):'');
     if(det&&det[5]) html+=`<div class="reason"><div class="ct">Model reasoning (Claude Sonnet 4.6)</div><p>${esc(det[5])}</p></div>`;
+    if(det&&det[6]){
+      const names=det[6].split(';').map(n=>n.trim()).filter(Boolean)
+        .map(n=>`<span class="au-link" data-au="${esc(n)}">${esc(n)}</span>`).join(', ');
+      html+=`<div class="claimblock" style="margin-top:18px"><div class="ct">Authors</div><div class="authcloud">${names}</div></div>`;
+    }
     const doi=u=>u?`<a href="https://doi.org/${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`:'—';
     html+=`<div class="metatable">
       <div class="row"><span class="k">Preprint DOI</span><span class="v">${doi(d[1])}</span></div>
@@ -371,7 +410,11 @@ function openModal(id){
       <div class="row"><span class="k">Published</span><span class="v">${det&&det[9]?esc(det[9]):'—'}</span></div>
     </div>`;
     $('#mdetail').innerHTML=html;
+    bindAuthLinks($('#mdetail'));
   });
+}
+function bindAuthLinks(root){
+  root.querySelectorAll('.au-link').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();searchAuthor(el.dataset.au);}));
 }
 function closeModal(){$('#modalbg').classList.remove('show');}
 load();
