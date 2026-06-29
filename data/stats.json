@@ -1,0 +1,625 @@
+{
+ "fig1a": {
+  "unchanged": 39.9,
+  "minor": 50.0,
+  "major": 10.2
+ },
+ "fig1a_n": {
+  "unchanged": 28966,
+  "minor": 36293,
+  "major": 7385
+ },
+ "fig1b": {
+  "unchanged": 85.6,
+  "weakened": 8.4,
+  "strengthened": 4.2,
+  "NA": 1.8
+ },
+ "fig1b_ratio": 2.0,
+ "fig1c": {
+  "unchanged": {
+   "cautious": 0.0,
+   "confident": 0.0,
+   "unchanged": 100.0
+  },
+  "minor": {
+   "cautious": 10.3,
+   "confident": 5.1,
+   "unchanged": 84.6
+  },
+  "major": {
+   "cautious": 38.5,
+   "confident": 19.8,
+   "unchanged": 41.7
+  }
+ },
+ "fig1d": [
+  {
+   "field": "bioinformatics",
+   "n": 6092,
+   "unchanged": 42.4,
+   "minor": 50.4,
+   "major": 7.2
+  },
+  {
+   "field": "bioengineering",
+   "n": 2292,
+   "unchanged": 41.4,
+   "minor": 50.8,
+   "major": 7.8
+  },
+  {
+   "field": "biochemistry",
+   "n": 3255,
+   "unchanged": 38.9,
+   "minor": 52.5,
+   "major": 8.6
+  },
+  {
+   "field": "neuroscience",
+   "n": 13547,
+   "unchanged": 43.3,
+   "minor": 48.0,
+   "major": 8.7
+  },
+  {
+   "field": "evolutionary biology",
+   "n": 3485,
+   "unchanged": 44.4,
+   "minor": 46.2,
+   "major": 9.4
+  },
+  {
+   "field": "genetics",
+   "n": 2432,
+   "unchanged": 39.6,
+   "minor": 50.7,
+   "major": 9.6
+  },
+  {
+   "field": "biophysics",
+   "n": 3858,
+   "unchanged": 41.6,
+   "minor": 48.8,
+   "major": 9.6
+  },
+  {
+   "field": "systems biology",
+   "n": 1552,
+   "unchanged": 45.8,
+   "minor": 44.4,
+   "major": 9.8
+  },
+  {
+   "field": "ecology",
+   "n": 2864,
+   "unchanged": 37.6,
+   "minor": 52.5,
+   "major": 9.8
+  },
+  {
+   "field": "plant biology",
+   "n": 2305,
+   "unchanged": 37.0,
+   "minor": 52.8,
+   "major": 10.1
+  },
+  {
+   "field": "cancer biology",
+   "n": 2907,
+   "unchanged": 35.3,
+   "minor": 54.5,
+   "major": 10.3
+  },
+  {
+   "field": "molecular biology",
+   "n": 2994,
+   "unchanged": 39.8,
+   "minor": 49.6,
+   "major": 10.6
+  },
+  {
+   "field": "genomics",
+   "n": 3497,
+   "unchanged": 37.3,
+   "minor": 51.9,
+   "major": 10.8
+  },
+  {
+   "field": "developmental biology",
+   "n": 2378,
+   "unchanged": 39.1,
+   "minor": 49.9,
+   "major": 11.0
+  },
+  {
+   "field": "cell biology",
+   "n": 4551,
+   "unchanged": 37.1,
+   "minor": 51.6,
+   "major": 11.3
+  },
+  {
+   "field": "immunology",
+   "n": 3141,
+   "unchanged": 34.3,
+   "minor": 54.2,
+   "major": 11.5
+  },
+  {
+   "field": "microbiology",
+   "n": 6584,
+   "unchanged": 36.3,
+   "minor": 46.2,
+   "major": 17.5
+  }
+ ],
+ "fig1e": [
+  {
+   "field": "evolutionary biology",
+   "ratio": 0.39
+  },
+  {
+   "field": "microbiology",
+   "ratio": 0.42
+  },
+  {
+   "field": "genetics",
+   "ratio": 0.45
+  },
+  {
+   "field": "molecular biology",
+   "ratio": 0.45
+  },
+  {
+   "field": "developmental biology",
+   "ratio": 0.46
+  },
+  {
+   "field": "neuroscience",
+   "ratio": 0.47
+  },
+  {
+   "field": "ecology",
+   "ratio": 0.49
+  },
+  {
+   "field": "immunology",
+   "ratio": 0.51
+  },
+  {
+   "field": "biochemistry",
+   "ratio": 0.51
+  },
+  {
+   "field": "plant biology",
+   "ratio": 0.52
+  },
+  {
+   "field": "cell biology",
+   "ratio": 0.53
+  },
+  {
+   "field": "biophysics",
+   "ratio": 0.56
+  },
+  {
+   "field": "bioengineering",
+   "ratio": 0.56
+  },
+  {
+   "field": "genomics",
+   "ratio": 0.57
+  },
+  {
+   "field": "systems biology",
+   "ratio": 0.6
+  },
+  {
+   "field": "bioinformatics",
+   "ratio": 0.61
+  },
+  {
+   "field": "cancer biology",
+   "ratio": 0.63
+  }
+ ],
+ "fig1f": [
+  {
+   "from": "mechanism",
+   "to": "descriptive",
+   "n": 576
+  },
+  {
+   "from": "mechanism",
+   "to": "association",
+   "n": 306
+  },
+  {
+   "from": "association",
+   "to": "descriptive",
+   "n": 275
+  },
+  {
+   "from": "association",
+   "to": "mechanism",
+   "n": 239
+  },
+  {
+   "from": "descriptive",
+   "to": "mechanism",
+   "n": 238
+  },
+  {
+   "from": "method",
+   "to": "descriptive",
+   "n": 128
+  },
+  {
+   "from": "descriptive",
+   "to": "association",
+   "n": 116
+  },
+  {
+   "from": "descriptive",
+   "to": "method",
+   "n": 52
+  },
+  {
+   "from": "association",
+   "to": "method",
+   "n": 41
+  },
+  {
+   "from": "mechanism",
+   "to": "null_result",
+   "n": 36
+  },
+  {
+   "from": "mechanism",
+   "to": "method",
+   "n": 36
+  },
+  {
+   "from": "method",
+   "to": "mechanism",
+   "n": 36
+  },
+  {
+   "from": "null_result",
+   "to": "descriptive",
+   "n": 33
+  },
+  {
+   "from": "association",
+   "to": "null_result",
+   "n": 32
+  },
+  {
+   "from": "null_result",
+   "to": "association",
+   "n": 32
+  },
+  {
+   "from": "therapeutic",
+   "to": "descriptive",
+   "n": 30
+  },
+  {
+   "from": "method",
+   "to": "association",
+   "n": 29
+  },
+  {
+   "from": "therapeutic",
+   "to": "mechanism",
+   "n": 25
+  },
+  {
+   "from": "mechanism",
+   "to": "therapeutic",
+   "n": 24
+  },
+  {
+   "from": "null_result",
+   "to": "mechanism",
+   "n": 22
+  },
+  {
+   "from": "descriptive",
+   "to": "therapeutic",
+   "n": 9
+  },
+  {
+   "from": "descriptive",
+   "to": "null_result",
+   "n": 8
+  },
+  {
+   "from": "therapeutic",
+   "to": "method",
+   "n": 7
+  },
+  {
+   "from": "method",
+   "to": "therapeutic",
+   "n": 7
+  },
+  {
+   "from": "therapeutic",
+   "to": "association",
+   "n": 6
+  },
+  {
+   "from": "association",
+   "to": "therapeutic",
+   "n": 4
+  },
+  {
+   "from": "null_result",
+   "to": "method",
+   "n": 4
+  },
+  {
+   "from": "therapeutic",
+   "to": "null_result",
+   "n": 2
+  },
+  {
+   "from": "method",
+   "to": "null_result",
+   "n": 2
+  }
+ ],
+ "fig1f_total": 2355,
+ "fig2a": {
+  "unchanged": {
+   "unchanged": 65.7,
+   "minor": 30.8,
+   "major": 3.5
+  },
+  "minor": {
+   "unchanged": 21.0,
+   "minor": 68.9,
+   "major": 10.1
+  },
+  "major": {
+   "unchanged": 10.1,
+   "minor": 46.1,
+   "major": 43.8
+  }
+ },
+ "fig2b": [
+  {
+   "type": "method",
+   "n": 16616,
+   "primary_major": 5.4,
+   "secondary_major": 11.8
+  },
+  {
+   "type": "therapeutic",
+   "n": 2529,
+   "primary_major": 9.6,
+   "secondary_major": 12.5
+  },
+  {
+   "type": "null_result",
+   "n": 1422,
+   "primary_major": 9.7,
+   "secondary_major": 11.6
+  },
+  {
+   "type": "descriptive",
+   "n": 13803,
+   "primary_major": 11.4,
+   "secondary_major": 14.4
+  },
+  {
+   "type": "association",
+   "n": 12165,
+   "primary_major": 11.5,
+   "secondary_major": 13.4
+  },
+  {
+   "type": "mechanism",
+   "n": 25776,
+   "primary_major": 11.9,
+   "secondary_major": 13.5
+  }
+ ],
+ "fig2c": [
+  {
+   "year": 2014,
+   "n": 4,
+   "unchanged": 0.0,
+   "minor": 50.0,
+   "major": 50.0
+  },
+  {
+   "year": 2015,
+   "n": 4,
+   "unchanged": 50.0,
+   "minor": 50.0,
+   "major": 0.0
+  },
+  {
+   "year": 2016,
+   "n": 19,
+   "unchanged": 36.8,
+   "minor": 47.4,
+   "major": 15.8
+  },
+  {
+   "year": 2017,
+   "n": 74,
+   "unchanged": 24.3,
+   "minor": 58.1,
+   "major": 17.6
+  },
+  {
+   "year": 2018,
+   "n": 341,
+   "unchanged": 33.1,
+   "minor": 47.2,
+   "major": 19.6
+  },
+  {
+   "year": 2019,
+   "n": 1750,
+   "unchanged": 28.1,
+   "minor": 54.9,
+   "major": 17.0
+  },
+  {
+   "year": 2020,
+   "n": 13321,
+   "unchanged": 32.8,
+   "minor": 52.9,
+   "major": 14.3
+  },
+  {
+   "year": 2021,
+   "n": 19781,
+   "unchanged": 39.5,
+   "minor": 49.4,
+   "major": 11.1
+  },
+  {
+   "year": 2022,
+   "n": 15918,
+   "unchanged": 41.2,
+   "minor": 50.3,
+   "major": 8.5
+  },
+  {
+   "year": 2023,
+   "n": 13830,
+   "unchanged": 43.3,
+   "minor": 48.6,
+   "major": 8.1
+  },
+  {
+   "year": 2024,
+   "n": 7549,
+   "unchanged": 47.5,
+   "minor": 46.8,
+   "major": 5.7
+  },
+  {
+   "year": 2025,
+   "n": 53,
+   "unchanged": 56.6,
+   "minor": 43.4,
+   "major": 0.0
+  }
+ ],
+ "fig2d": [
+  {
+   "tertile": 1,
+   "median_days": 110,
+   "n": 24212,
+   "unchanged": 48.1,
+   "minor": 44.9,
+   "major": 7.0
+  },
+  {
+   "tertile": 2,
+   "median_days": 218,
+   "n": 24212,
+   "unchanged": 39.3,
+   "minor": 51.2,
+   "major": 9.5
+  },
+  {
+   "tertile": 3,
+   "median_days": 415,
+   "n": 24213,
+   "unchanged": 32.2,
+   "minor": 53.8,
+   "major": 14.0
+  }
+ ],
+ "fig2e": {
+  "octiles": [
+   {
+    "mean_cites": 1.81,
+    "revision": 54.9,
+    "n": 7376
+   },
+   {
+    "mean_cites": 2.7,
+    "revision": 55.4,
+    "n": 7377
+   },
+   {
+    "mean_cites": 3.05,
+    "revision": 56.2,
+    "n": 7376
+   },
+   {
+    "mean_cites": 3.64,
+    "revision": 55.6,
+    "n": 7377
+   },
+   {
+    "mean_cites": 4.15,
+    "revision": 53.9,
+    "n": 7376
+   },
+   {
+    "mean_cites": 5.22,
+    "revision": 65.2,
+    "n": 7377
+   },
+   {
+    "mean_cites": 8.69,
+    "revision": 69.8,
+    "n": 7376
+   },
+   {
+    "mean_cites": 15.23,
+    "revision": 69.2,
+    "n": 7377
+   }
+  ],
+  "slope_pp_per_decade": 20.2,
+  "r2": 0.76,
+  "n_pairs": 59012,
+  "paper_slope": 23,
+  "paper_r2": 0.77,
+  "paper_n": 59012,
+  "paper_journals": 908
+ },
+ "fig2f": {
+  "preprinted_per_10k": 8.1,
+  "nonpreprinted_per_10k": 18.7,
+  "rate_ratio": 2.31,
+  "ci": [
+   1.2,
+   4.45
+  ],
+  "p": 0.003,
+  "preprinted_n": [
+   9,
+   11114
+  ],
+  "nonpreprinted_n": [
+   813,
+   435159
+  ]
+ },
+ "kappa": {
+  "expert_expert": 0.6,
+  "model_expert_lo": 0.63,
+  "model_expert_hi": 0.66,
+  "within_sonnet": 0.75
+ },
+ "headline": {
+  "n_pairs": 72644,
+  "n_journals": 3149,
+  "n_fields_all": 39,
+  "n_fields_1500": 17,
+  "coverage_pct": 98.0,
+  "length_filtered": 74098
+ }
+}

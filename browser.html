@@ -3,414 +3,378 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Preprint-to-Publication Browser</title>
+<title>Browse the dataset · Preprint to Publication</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-    color: #1F2937;
-    background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 240px);
-    line-height: 1.55;
-    min-height: 100vh;
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap');
+  :root{
+    --ink:#16202e; --muted:#5b6b7e; --line:#e6eaf0; --bg:#f6f8fb; --card:#fff;
+    --blue:#1e3a8a; --blue2:#2563eb; --sky:#e8f0fe; --coral:#ff6b6b;
+    --unchanged:#1f9d61; --minor:#d99100; --major:#d6455d;
+    --cautious:#2f6fb0; --confident:#b85c00; --shadow:0 1px 3px rgba(20,40,80,.06),0 8px 24px rgba(20,40,80,.05);
   }
-  header {
-    background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
-    color: white;
-    padding: 28px 32px 24px;
-    box-shadow: 0 4px 24px rgba(30, 58, 138, 0.18);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-row { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
-  h1 {
-    font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
-    flex: 0 0 auto;
-  }
-  .stats { font-size: 13px; opacity: 0.85; flex: 0 0 auto; }
-  .search-wrap { flex: 1 1 380px; min-width: 240px; }
-  #q {
-    width: 100%; padding: 12px 16px; border-radius: 10px;
-    border: none; font-size: 15px; font-family: inherit;
-    background: rgba(255,255,255,0.95); color: #1F2937;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
-  #q::placeholder { color: #94A3B8; }
-  #q:focus { outline: 2px solid #FBBF24; outline-offset: 2px; }
-  .filters {
-    max-width: 1400px; margin: 16px auto 0;
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .filter-group {
-    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
-    padding: 6px 10px; background: rgba(255,255,255,0.08);
-    border-radius: 8px;
-  }
-  .filter-group span.lbl {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.05em; opacity: 0.75; margin-right: 4px;
-  }
-  .chip {
-    padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600;
-    cursor: pointer; user-select: none;
-    background: rgba(255,255,255,0.18); color: white;
-    border: 1px solid rgba(255,255,255,0.25);
-    transition: all 0.15s;
-  }
-  .chip:hover { background: rgba(255,255,255,0.32); }
-  .chip.active { background: white; color: #1E3A8A; border-color: white; }
-  select.chip {
-    appearance: none; padding-right: 24px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10"><path d="M2 4l3 3 3-3" stroke="white" stroke-width="1.5" fill="none"/></svg>');
-    background-repeat: no-repeat; background-position: right 6px center;
-  }
-  select.chip option { background: #1E3A8A; color: white; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue2);text-decoration:none}a:hover{text-decoration:underline}
 
-  main {
-    max-width: 1400px; margin: 0 auto; padding: 24px 32px 80px;
-  }
-  .meta-line { color: #64748B; font-size: 14px; margin-bottom: 16px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+  nav.top{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+  nav.top .brand{font-size:17px;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+  nav.top .brand .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--blue));box-shadow:0 0 0 4px rgba(30,58,138,.08)}
+  nav.top .links{display:flex;gap:6px}
+  nav.top .links a{color:var(--muted);font-size:14px;font-weight:600;padding:7px 13px;border-radius:8px;transition:.15s}
+  nav.top .links a:hover{color:var(--blue);background:var(--sky);text-decoration:none}
+  nav.top .links a.active{color:var(--blue);background:var(--sky)}
 
-  .card {
-    background: white;
-    border-radius: 12px; padding: 18px 20px;
-    box-shadow: 0 2px 10px rgba(30, 58, 138, 0.06);
-    border: 1px solid #E2E8F0;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .card:hover {
-    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.12);
-    transform: translateY(-1px); border-color: #CBD5E1;
-  }
-  .card .id { font-size: 11px; color: #94A3B8; letter-spacing: 0.05em; font-weight: 500; }
-  .card .title {
-    font-size: 15px; font-weight: 600; color: #1F2937; line-height: 1.35;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .card .auth {
-    font-size: 13px; color: #475569; font-style: italic;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .card .journal {
-    font-size: 13px; color: #1E3A8A; font-weight: 500;
-  }
-  .card-foot { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: auto; padding-top: 6px; }
-  .badge {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.04em; padding: 3px 8px; border-radius: 4px;
-  }
-  .b-unchanged { background: #F1F5F9; color: #475569; }
-  .b-minor { background: #FEF3C7; color: #92400E; }
-  .b-major { background: #FEE2E2; color: #991B1B; }
-  .b-strengthened { background: #D1FAE5; color: #065F46; }
-  .b-weakened { background: #FED7AA; color: #9A3412; }
-  .b-cat { background: #DBEAFE; color: #1E40AF; }
-  .b-yr { background: #E0E7FF; color: #3730A3; }
-  .b-rt { background: #FECACA; color: #991B1B; border: 1px solid #DC2626; }
-  .b-tc { background: #F3E8FF; color: #6B21A8; }
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 24px 80px}
+  .head h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+  .head p{color:var(--muted);font-size:14.5px;max-width:760px}
 
-  /* Modal */
-  .modal-bg {
-    position: fixed; inset: 0;
-    background: rgba(15, 23, 42, 0.72);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    display: none; align-items: center; justify-content: center; padding: 24px;
-  }
-  .modal-bg.show { display: flex; }
-  .modal {
-    background: white; border-radius: 16px; max-width: 1000px; width: 100%;
-    max-height: 92vh; overflow-y: auto;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.3);
-    padding: 28px 32px;
-  }
-  .close-btn {
-    position: absolute; top: 14px; right: 14px;
-    width: 32px; height: 32px; border-radius: 8px;
-    background: #F1F5F9; border: none; cursor: pointer; font-size: 20px;
-    color: #475569;
-  }
-  .close-btn:hover { background: #E2E8F0; }
-  .modal h2 { font-size: 22px; font-weight: 700; color: #1E3A8A; margin-bottom: 6px; line-height: 1.3; }
-  .modal .ah { color: #475569; font-size: 14px; margin-bottom: 4px; }
-  .modal .meta { color: #64748B; font-size: 13px; margin-bottom: 16px; }
-  .modal a { color: #1E3A8A; text-decoration: underline; }
-  .modal .badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 18px; }
-  .compare {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;
-  }
-  .col {
-    background: #F8FAFC; border-radius: 10px; padding: 14px 16px;
-    border: 1px solid #E2E8F0;
-  }
-  .col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-  .col.pre h4 { color: #0891B2; }
-  .col.pub h4 { color: #DC2626; }
-  .col p { font-size: 14px; line-height: 1.5; color: #1F2937; }
-  .col .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 8px; color: #64748B; }
-  .reason {
-    background: #FEF3C7; border-left: 4px solid #F59E0B;
-    padding: 12px 16px; border-radius: 8px; font-size: 13px; color: #78350F; margin-top: 16px; line-height: 1.5;
-  }
-  .empty { text-align: center; padding: 80px 20px; color: #94A3B8; }
-  .pagination {
-    display: flex; justify-content: center; gap: 8px; margin-top: 32px;
-  }
-  .pagination button {
-    padding: 8px 14px; border-radius: 8px; border: 1px solid #CBD5E1;
-    background: white; cursor: pointer; font-family: inherit; font-size: 13px;
-    color: #475569;
-  }
-  .pagination button:hover:not(:disabled) { background: #F1F5F9; }
-  .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
-  .pagination button.active { background: #1E3A8A; color: white; border-color: #1E3A8A; }
-  .loading { text-align: center; padding: 60px; color: #94A3B8; font-size: 14px; }
+  /* search + controls */
+  .toolbar{position:sticky;top:65px;z-index:40;background:var(--bg);padding:16px 0 10px;margin-top:14px}
+  .searchbar{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:11px 15px;box-shadow:var(--shadow);transition:.15s}
+  .searchbar:focus-within{border-color:var(--blue2);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+  .searchbar svg{flex:none;color:var(--muted)}
+  .searchbar input{flex:1;border:none;outline:none;font-size:16px;font-family:inherit;color:var(--ink);background:none}
+  .searchbar .count{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .hint{font-size:12px;color:var(--muted);margin:8px 2px 0}
+  .hint b{color:var(--blue)}
+
+  .controls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-top:13px}
+  .chipset{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .chipset .lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-right:2px}
+  .chip{font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;transition:.13s;user-select:none}
+  .chip:hover{border-color:#c4d0e0}
+  .chip.on{color:#fff;border-color:transparent}
+  .chip.on.c-unchanged{background:var(--unchanged)} .chip.on.c-minor{background:var(--minor)} .chip.on.c-major{background:var(--major)}
+  .chip.on.c-cautious{background:var(--cautious)} .chip.on.c-confident{background:var(--confident)} .chip.on.c-type{background:var(--blue)}
+  select{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:7px 10px;cursor:pointer;outline:none}
+  select:focus{border-color:var(--blue2)}
+  .reset{font-size:12.5px;color:var(--coral);font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit}
+  .reset:hover{text-decoration:underline}
+
+  /* results */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 17px;cursor:pointer;transition:.14s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-2px);border-color:#c9d6ea;box-shadow:0 4px 10px rgba(20,40,80,.08),0 14px 32px rgba(20,40,80,.07)}
+  .card .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .stripe.s-unchanged{background:var(--unchanged)} .stripe.s-minor{background:var(--minor)} .stripe.s-major{background:var(--major)}
+  .card h3{font-size:14.5px;font-weight:700;line-height:1.35;margin:0 0 7px;padding-left:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .meta{font-size:12.5px;color:var(--muted);padding-left:6px;margin-bottom:9px}
+  .card .meta .j{color:var(--ink);font-weight:600}
+  .badges{display:flex;flex-wrap:wrap;gap:5px;padding-left:6px}
+  .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;letter-spacing:.01em}
+  .b-unchanged{background:#e4f6ec;color:#137a47} .b-minor{background:#fdf1d8;color:#9a6800} .b-major{background:#fbe2e7;color:#b32b44}
+  .b-cautious{background:#e4eef9;color:#22588f} .b-confident{background:#f7e9d6;color:#8f4a00}
+  .b-type{background:#e9e9fb;color:#4b3fb0} .b-plain{background:#eef2f7;color:#56657a}
+
+  .pager{display:flex;justify-content:center;align-items:center;gap:5px;margin-top:26px;flex-wrap:wrap}
+  .pager button{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;transition:.13s}
+  .pager button:hover:not(:disabled){border-color:var(--blue2);color:var(--blue)}
+  .pager button:disabled{opacity:.4;cursor:default}
+  .pager .pinfo{font-size:13px;color:var(--muted);margin:0 8px;font-variant-numeric:tabular-nums}
+  .pager input{width:58px;font-family:inherit;font-size:13px;text-align:center;border:1.5px solid var(--line);border-radius:8px;padding:7px 4px;outline:none}
+
+  .empty{text-align:center;color:var(--muted);padding:60px 20px;font-size:15px}
+
+  /* loader */
+  #loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:18px;transition:opacity .4s}
+  #loader .ring{width:46px;height:46px;border:4px solid var(--sky);border-top-color:var(--blue2);border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #loader .pbar{width:240px;height:7px;background:var(--line);border-radius:6px;overflow:hidden}
+  #loader .pfill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--blue2));transition:width .2s}
+  #loader .ptext{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+  #loader h2{font-size:16px;font-weight:700;color:var(--blue)}
+
+  /* modal */
+  .modalbg{position:fixed;inset:0;background:rgba(15,25,45,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:36px 18px;overflow-y:auto}
+  .modalbg.show{display:flex}
+  .modal{background:#fff;border-radius:16px;max-width:880px;width:100%;box-shadow:0 24px 70px rgba(10,20,40,.4);animation:pop .22s ease}
+  @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .modal .mhead{padding:24px 28px 18px;border-bottom:1px solid var(--line);position:relative}
+  .modal .mhead h2{font-size:19px;font-weight:800;line-height:1.32;padding-right:34px;letter-spacing:-.01em}
+  .modal .mhead .sub{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .modal .mhead .sub .j{color:var(--ink);font-weight:600}
+  .modal .close{position:absolute;top:20px;right:22px;width:32px;height:32px;border:none;background:var(--bg);border-radius:9px;font-size:19px;color:var(--muted);cursor:pointer;line-height:1;transition:.13s}
+  .modal .close:hover{background:#fbe2e7;color:var(--major)}
+  .modal .mbody{padding:20px 28px 28px}
+  .mbadges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .claimblock{margin-bottom:16px}
+  .claimblock .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .claimblock .ct .pill{font-size:10px;font-weight:700;background:var(--sky);color:var(--blue2);padding:2px 8px;border-radius:10px;letter-spacing:.02em}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.cmp{grid-template-columns:1fr}}
+  .cmp .side{background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+  .cmp .side.pub{background:#f3f8ff;border-color:#dbe8fb}
+  .cmp .side .tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+  .cmp .side.pub .tag{color:var(--blue2)}
+  .cmp .side p{font-size:13.5px;line-height:1.6;color:var(--ink);font-family:'Newsreader',Georgia,serif}
+  .reason{background:#fffaf0;border:1px solid #f3e2c0;border-radius:11px;padding:14px 16px;margin-top:6px}
+  .reason .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9a6800;margin-bottom:6px}
+  .reason p{font-size:13px;line-height:1.62;color:#5c4a1e;font-family:'Newsreader',Georgia,serif}
+  .metatable{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  @media(max-width:640px){.metatable{grid-template-columns:1fr}}
+  .metatable .row{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;border-bottom:1px dotted var(--line);padding-bottom:6px}
+  .metatable .row .k{color:var(--muted);font-weight:600}
+  .metatable .row .v{color:var(--ink);font-weight:600;text-align:right}
+  .mload{text-align:center;color:var(--muted);padding:20px;font-size:13px}
 </style>
 </head>
 <body>
+<nav class="top">
+  <div class="brand"><span class="dot"></span> Preprint&nbsp;→&nbsp;Publication</div>
+  <div class="links">
+    <a href="index.html">Overview</a>
+    <a href="findings.html">Findings</a>
+    <a href="browser.html" class="active">Browse data</a>
+  </div>
+</nav>
 
-<header>
-  <div class="header-row">
-    <a href="index.html" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;flex:0 0 auto;">
-      <span style="font-size:22px;font-weight:800;letter-spacing:-0.01em;">← Preprint Browser</span>
-    </a>
-    <div class="stats" id="stats">loading…</div>
-    <div class="search-wrap">
-      <input id="q" type="search" placeholder="Search title, author, journal, institution…" autofocus>
+<div id="loader">
+  <div class="ring"></div>
+  <h2>Loading 72,644 preprint–publication pairs…</h2>
+  <div class="pbar"><div class="pfill" id="pfill"></div></div>
+  <div class="ptext" id="ptext">0 MB</div>
+</div>
+
+<div class="wrap">
+  <div class="head">
+    <h1>Browse the dataset</h1>
+    <p>Every one of the 72,644 bioRxiv preprint–publication pairs, with the claim-level labels assigned by Claude Sonnet 4.6. Search the titles, authors, journals, institutions, DOIs, and the extracted primary claims, then open any pair to see the side-by-side claims and the model's reasoning.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="searchbar">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Search claims, titles, authors, journals, institutions, DOI…" autocomplete="off" autofocus>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="hint">Tip: try <b>microbiology</b>, <b>CRISPR</b>, <b>Nature</b>, an author, or a phrase from a claim. Filters and search combine.</div>
+
+    <div class="controls">
+      <div class="chipset">
+        <span class="lbl">Change</span>
+        <span class="chip c-unchanged" data-f="L" data-v="unchanged">Unchanged</span>
+        <span class="chip c-minor" data-f="L" data-v="minor">Minor</span>
+        <span class="chip c-major" data-f="L" data-v="major">Major</span>
+      </div>
+      <div class="chipset">
+        <span class="lbl">Hedging</span>
+        <span class="chip c-cautious" data-f="H" data-v="weakened">More cautious</span>
+        <span class="chip c-confident" data-f="H" data-v="strengthened">More confident</span>
+      </div>
+      <div class="chipset">
+        <span class="chip c-type" data-f="TC" data-v="1">Claim type changed</span>
+      </div>
+      <select id="fCat"><option value="">All fields</option></select>
+      <select id="fYear"><option value="">All years</option></select>
+      <select id="sort">
+        <option value="yr_desc">Newest preprint</option>
+        <option value="yr_asc">Oldest preprint</option>
+        <option value="dtp_desc">Longest review</option>
+        <option value="dtp_asc">Shortest review</option>
+        <option value="imp_desc">Highest-impact journal</option>
+        <option value="change">Biggest change first</option>
+      </select>
+      <button class="reset" id="reset">Clear all</button>
     </div>
   </div>
-  <div class="filters" id="filters"></div>
-</header>
 
-<main>
-  <p class="meta-line" id="meta">Loading 3,010 papers…</p>
   <div class="grid" id="grid"></div>
-  <div class="pagination" id="pager"></div>
-</main>
+  <div class="pager" id="pager"></div>
+</div>
 
-<div class="modal-bg" id="modalbg">
-  <div class="modal" id="modal" style="position:relative">
-    <button class="close-btn" id="closeBtn">×</button>
-    <div id="modalContent"></div>
-  </div>
+<div class="modalbg" id="modalbg">
+  <div class="modal" id="modal"></div>
 </div>
 
 <script>
-let DATA = [];
-let FILTERED = [];
-let PAGE = 0;
-const PAGE_SIZE = 60;
-let FILTERS = { L:'all', H:'all', cat:'all', yr:'all', tc:'all', rt:'all' };
+/* ---- index schema (array-of-arrays) ----
+[0]id [1]preDOI [2]pubDOI [3]title [4]firstAuthor [5]corr [6]inst [7]cat [8]journal
+[9]year [10]daysToPub [11]impact [12]quartile [13]L(content) [14]H(hedging)
+[15]preType [16]pubType [17]typeChanged [18]s1L [19]s1H [20]s2L [21]s2H [22]pubPrimaryClaim
+   detail shard d/{id//1200}.json -> {id:[ 0 prePrimary,1 preS1,2 pubS1,3 preS2,4 pubS2,
+                                          5 reasoning,6 authors,7 preTitle,8 preDate,9 pubDate,10 pmid,11 jaccard ]} */
+const PAGE_SIZE = 24, SHARD = 1200;
+let DATA = [], BLOB = [], FILTERED = [], PAGE = 0;
+const state = { q:'', L:new Set(), H:new Set(), TC:false, cat:'', year:'', sort:'yr_desc' };
+const shardCache = {};
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cap = s => s ? s.charAt(0).toUpperCase()+s.slice(1) : '';
+const TYPE = {mechanism:'Mechanism',association:'Association',descriptive:'Descriptive',method:'Method',therapeutic:'Therapeutic',null_result:'Null result'};
+const tdisp = t => TYPE[t] || cap((t||'').replace(/_/g,' '));
 
-const fmtN = n => n.toLocaleString();
-
-async function load() {
-  const r = await fetch('papers.json');
-  DATA = await r.json();
-  document.getElementById('stats').textContent = `${fmtN(DATA.length)} papers · v7.1 codebook`;
-  buildFilters();
-  applyFilters();
-}
-
-function buildFilters() {
-  const cats = [...new Set(DATA.map(d=>d.cat).filter(Boolean))].sort();
-  const yrs = [...new Set(DATA.map(d=>d.yr).filter(Boolean))].sort();
-  const f = document.getElementById('filters');
-
-  const groups = [
-    { key:'L', label:'change',
-      opts:[['all','all'],['unchanged','unchanged'],['minor','minor'],['major','major']] },
-    { key:'H', label:'hedging',
-      opts:[['all','all'],['unchanged','unchanged'],['strengthened','strengthened'],['weakened','weakened'],['NA','NA']] },
-    { key:'tc', label:'type changed',
-      opts:[['all','all'],['true','yes'],['false','no']] },
-    { key:'rt', label:'retracted',
-      opts:[['all','all'],['true','yes only']] },
-  ];
-  for (const g of groups) {
-    const grp = document.createElement('div');
-    grp.className = 'filter-group';
-    grp.innerHTML = `<span class="lbl">${g.label}</span>`;
-    for (const [v, lbl] of g.opts) {
-      const btn = document.createElement('button');
-      btn.className = 'chip' + (FILTERS[g.key]===v ? ' active':'');
-      btn.textContent = lbl;
-      btn.onclick = () => {
-        FILTERS[g.key] = v;
-        grp.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        PAGE = 0;
-        applyFilters();
-      };
-      grp.appendChild(btn);
-    }
-    f.appendChild(grp);
+/* streaming loader with progress */
+async function load(){
+  const res = await fetch('data/index.json');
+  // use the known uncompressed size: GitHub Pages gzips the response, so the
+  // decompressed stream we read is ~43.4 MB even though Content-Length is smaller.
+  const total = 43466195;
+  const reader = res.body.getReader(); let got=0, chunks=[];
+  while(true){
+    const {done,value} = await reader.read(); if(done) break;
+    chunks.push(value); got+=value.length;
+    const pc = Math.min(100, got/total*100);
+    $('#pfill').style.width = pc+'%';
+    $('#ptext').textContent = (got/1048576).toFixed(1)+' MB';
   }
-
-  // Category select (many values)
-  const catGrp = document.createElement('div');
-  catGrp.className = 'filter-group';
-  catGrp.innerHTML = `<span class="lbl">category</span>`;
-  const catSel = document.createElement('select');
-  catSel.className = 'chip';
-  catSel.innerHTML = `<option value="all">all</option>` + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-  catSel.onchange = () => { FILTERS.cat = catSel.value; PAGE=0; applyFilters(); };
-  catGrp.appendChild(catSel);
-  f.appendChild(catGrp);
-
-  // Year
-  const yrGrp = document.createElement('div');
-  yrGrp.className = 'filter-group';
-  yrGrp.innerHTML = `<span class="lbl">year</span>`;
-  const yrSel = document.createElement('select');
-  yrSel.className = 'chip';
-  yrSel.innerHTML = `<option value="all">all</option>` + yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
-  yrSel.onchange = () => { FILTERS.yr = yrSel.value; PAGE=0; applyFilters(); };
-  yrGrp.appendChild(yrSel);
-  f.appendChild(yrGrp);
+  let size=0; chunks.forEach(c=>size+=c.length);
+  const buf=new Uint8Array(size); let off=0; chunks.forEach(c=>{buf.set(c,off);off+=c.length});
+  DATA = JSON.parse(new TextDecoder().decode(buf));
+  BLOB = DATA.map(d => (d[3]+' '+d[4]+' '+d[5]+' '+d[6]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase());
+  buildSelects(); bindUI(); apply();
+  const l=$('#loader'); l.style.opacity=0; setTimeout(()=>l.style.display='none',400);
 }
 
-function applyFilters() {
-  const q = (document.getElementById('q').value||'').trim().toLowerCase();
-  FILTERED = DATA.filter(d => {
-    if (FILTERS.L !== 'all' && d.L !== FILTERS.L) return false;
-    if (FILTERS.H !== 'all' && d.H !== FILTERS.H) return false;
-    if (FILTERS.cat !== 'all' && d.cat !== FILTERS.cat) return false;
-    if (FILTERS.yr !== 'all' && String(d.yr) !== FILTERS.yr) return false;
-    if (FILTERS.tc !== 'all' && String(!!d.tc) !== FILTERS.tc) return false;
-    if (FILTERS.rt === 'true' && !d.rt) return false;
-    if (q) {
-      const hay = (d.p_title + ' ' + d.j_title + ' ' + d.authors + ' ' + d.j + ' ' + d.inst + ' ' + d.cat + ' ' + d.id).toLowerCase();
-      if (!hay.includes(q)) return false;
-    }
+function buildSelects(){
+  const cats=[...new Set(DATA.map(d=>d[7]).filter(Boolean))].sort();
+  const yrs=[...new Set(DATA.map(d=>d[9]).filter(Boolean))].sort((a,b)=>b-a);
+  $('#fCat').insertAdjacentHTML('beforeend', cats.map(c=>`<option value="${esc(c)}">${esc(cap(c))}</option>`).join(''));
+  $('#fYear').insertAdjacentHTML('beforeend', yrs.map(y=>`<option value="${y}">${y}</option>`).join(''));
+}
+
+function bindUI(){
+  let t; $('#q').addEventListener('input', e=>{clearTimeout(t);t=setTimeout(()=>{state.q=e.target.value.trim().toLowerCase();PAGE=0;apply();},130);});
+  document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
+    const f=ch.dataset.f, v=ch.dataset.v;
+    if(f==='TC'){state.TC=!state.TC;ch.classList.toggle('on',state.TC);}
+    else{ if(state[f].has(v)){state[f].delete(v);ch.classList.remove('on');} else {state[f].add(v);ch.classList.add('on');} }
+    PAGE=0;apply();
+  }));
+  $('#fCat').addEventListener('change',e=>{state.cat=e.target.value;PAGE=0;apply();});
+  $('#fYear').addEventListener('change',e=>{state.year=e.target.value;PAGE=0;apply();});
+  $('#sort').addEventListener('change',e=>{state.sort=e.target.value;PAGE=0;apply();});
+  $('#reset').addEventListener('click',()=>{
+    state.q='';state.L.clear();state.H.clear();state.TC=false;state.cat='';state.year='';state.sort='yr_desc';
+    $('#q').value='';$('#fCat').value='';$('#fYear').value='';$('#sort').value='yr_desc';
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));PAGE=0;apply();
+  });
+  $('#modalbg').addEventListener('click',e=>{if(e.target.id==='modalbg')closeModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+  // accept ?q= from the overview search box, and ?id= deep link
+  const params=new URLSearchParams(location.search);
+  const pq=params.get('q');
+  if(pq){$('#q').value=pq;state.q=pq.trim().toLowerCase();}
+  const qid=params.get('id'); if(qid!==null && DATA[+qid]) openModal(+qid);
+}
+
+const ORDER={major:3,minor:2,unchanged:1};
+function apply(){
+  const q=state.q;
+  FILTERED = DATA.filter((d,i)=>{
+    if(state.L.size && !state.L.has(d[13])) return false;
+    if(state.H.size && !state.H.has(d[14])) return false;
+    if(state.TC && d[17]!==1) return false;
+    if(state.cat && d[7]!==state.cat) return false;
+    if(state.year && d[9]!=state.year) return false;
+    if(q && !BLOB[i].includes(q)) return false;
     return true;
   });
-  document.getElementById('meta').textContent =
-    `${fmtN(FILTERED.length)} of ${fmtN(DATA.length)} papers · click any card to expand`;
+  const s=state.sort;
+  FILTERED.sort((a,b)=>{
+    if(s==='yr_desc')return (b[9]||0)-(a[9]||0)||(b[10]||0)-(a[10]||0);
+    if(s==='yr_asc')return (a[9]||0)-(b[9]||0);
+    if(s==='dtp_desc')return (b[10]||0)-(a[10]||0);
+    if(s==='dtp_asc')return (a[10]||1e9)-(b[10]||1e9);
+    if(s==='imp_desc')return (b[11]||0)-(a[11]||0);
+    if(s==='change')return (ORDER[b[13]]||0)-(ORDER[a[13]]||0)||(b[10]||0)-(a[10]||0);
+    return 0;
+  });
+  $('#count').textContent = FILTERED.length.toLocaleString()+' of '+DATA.length.toLocaleString();
   render();
 }
 
-function badge(text, cls) {
-  return `<span class="badge ${cls}">${text}</span>`;
-}
-
-function render() {
-  const grid = document.getElementById('grid');
-  const start = PAGE * PAGE_SIZE;
-  const slice = FILTERED.slice(start, start + PAGE_SIZE);
-  if (slice.length === 0) {
-    grid.innerHTML = '<p class="empty">No papers match your filters.</p>';
-    document.getElementById('pager').innerHTML = '';
-    return;
-  }
-  grid.innerHTML = slice.map((d, i) => {
-    const labelB = badge(d.L||'?', 'b-'+(d.L||'unchanged'));
-    const hedgeB = d.H && d.H!=='unchanged' ? badge(d.H, 'b-'+d.H) : '';
-    const tcB = d.tc ? badge('type changed', 'b-tc') : '';
-    const rtB = d.rt ? badge('RETRACTED', 'b-rt') : '';
-    return `
-      <div class="card" data-idx="${start+i}">
-        <div class="id">${d.id} · ${d.cat||'—'} · ${d.yr||''}</div>
-        <div class="title">${escapeHtml(d.p_title || d.j_title || '(no title)')}</div>
-        <div class="auth">${escapeHtml(d.fa || d.corr || 'no author info')}${d.authors && d.authors.includes(';') ? ' et al.' : ''}</div>
-        <div class="journal">${escapeHtml(d.j || '—')}${d.if ? ' · IF ' + d.if : ''}</div>
-        <div class="card-foot">${labelB}${hedgeB}${tcB}${rtB}</div>
-      </div>`;
+function render(){
+  const grid=$('#grid');
+  if(!FILTERED.length){grid.innerHTML='<p class="empty">No pairs match your search and filters.</p>';$('#pager').innerHTML='';return;}
+  const start=PAGE*PAGE_SIZE, slice=FILTERED.slice(start,start+PAGE_SIZE);
+  grid.innerHTML = slice.map(d=>{
+    const tc = d[17]===1 ? `<span class="badge b-type">${tdisp(d[15])} → ${tdisp(d[16])}</span>` : '';
+    const hed = d[14]==='weakened' ? '<span class="badge b-cautious">More cautious</span>'
+             : d[14]==='strengthened' ? '<span class="badge b-confident">More confident</span>' : '';
+    const imp = d[11]!=null ? ` · impact ${d[11]}` : '';
+    return `<div class="card" data-id="${d[0]}">
+      <div class="stripe s-${d[13]}"></div>
+      <h3>${esc(d[3])}</h3>
+      <div class="meta"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))} · ${esc(d[4]||'')}${imp}</div>
+      <div class="badges"><span class="badge b-${d[13]}">${cap(d[13])}</span>${hed}${tc}</div>
+    </div>`;
   }).join('');
-  grid.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => openModal(parseInt(c.dataset.idx))));
+  grid.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>openModal(+c.dataset.id)));
   renderPager();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function renderPager() {
-  const totalPages = Math.ceil(FILTERED.length / PAGE_SIZE);
-  if (totalPages <= 1) { document.getElementById('pager').innerHTML = ''; return; }
-  const p = PAGE;
-  let html = `<button onclick="goPage(0)" ${p===0?'disabled':''}>« first</button>`;
-  html += `<button onclick="goPage(${p-1})" ${p===0?'disabled':''}>‹ prev</button>`;
-  // Show range of pages around current
-  const start = Math.max(0, p-2), end = Math.min(totalPages, p+3);
-  for (let i = start; i < end; i++) {
-    html += `<button onclick="goPage(${i})" class="${i===p?'active':''}">${i+1}</button>`;
-  }
-  html += `<button onclick="goPage(${p+1})" ${p===totalPages-1?'disabled':''}>next ›</button>`;
-  html += `<button onclick="goPage(${totalPages-1})" ${p===totalPages-1?'disabled':''}>last »</button>`;
-  document.getElementById('pager').innerHTML = html;
+function renderPager(){
+  const pages=Math.ceil(FILTERED.length/PAGE_SIZE);
+  if(pages<=1){$('#pager').innerHTML='';return;}
+  $('#pager').innerHTML=`
+    <button ${PAGE===0?'disabled':''} data-p="0">« First</button>
+    <button ${PAGE===0?'disabled':''} data-p="${PAGE-1}">‹ Prev</button>
+    <span class="pinfo">Page <input id="jump" value="${PAGE+1}"> of ${pages.toLocaleString()}</span>
+    <button ${PAGE>=pages-1?'disabled':''} data-p="${PAGE+1}">Next ›</button>
+    <button ${PAGE>=pages-1?'disabled':''} data-p="${pages-1}">Last »</button>`;
+  $('#pager').querySelectorAll('button[data-p]').forEach(b=>b.addEventListener('click',()=>{PAGE=+b.dataset.p;render();}));
+  const j=$('#jump'); if(j) j.addEventListener('keydown',e=>{if(e.key==='Enter'){let n=Math.max(1,Math.min(pages,+j.value||1));PAGE=n-1;render();}});
 }
 
-function goPage(i) {
-  PAGE = Math.max(0, Math.min(i, Math.ceil(FILTERED.length / PAGE_SIZE) - 1));
-  render();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+async function getDetail(id){
+  const sid=Math.floor(id/SHARD);
+  if(!shardCache[sid]) shardCache[sid]=fetch(`data/d/${sid}.json`).then(r=>r.json());
+  const s=await shardCache[sid]; return s[id];
 }
 
-function openModal(idx) {
-  const d = FILTERED[idx];
-  if (!d) return;
-  const labelB = badge(d.L||'?', 'b-'+(d.L||'unchanged'));
-  const hedgeB = d.H && d.H!=='unchanged' ? badge('hedging: '+d.H, 'b-'+d.H) : badge('hedging: unchanged', 'b-unchanged');
-  const tcB = d.tc ? badge('type changed', 'b-tc') : '';
-  const rtB = d.rt ? badge('RETRACTED', 'b-rt') : '';
-  const c = document.getElementById('modalContent');
-  c.innerHTML = `
-    <h2>${escapeHtml(d.j_title || d.p_title || '')}</h2>
-    <p class="ah">${escapeHtml(d.authors || 'authors not available')}</p>
-    <p class="meta">
-      ${escapeHtml(d.j || '—')}${d.yr ? ' · ' + d.yr : ''}${d.if ? ' · IF ' + d.if : ''}${d.dtp ? ' · ' + d.dtp + ' days to publication' : ''}
-      ${d.inst ? '<br><strong>Institution:</strong> ' + escapeHtml(d.inst) : ''}
-      ${d.corr ? '<br><strong>Corresponding:</strong> ' + escapeHtml(d.corr) : ''}
-    </p>
-    <p class="meta">
-      <a href="https://doi.org/${escapeHtml(d.p_doi)}" target="_blank">bioRxiv: ${escapeHtml(d.p_doi)}</a><br>
-      <a href="https://doi.org/${escapeHtml(d.j_doi)}" target="_blank">Published: ${escapeHtml(d.j_doi)}</a>
-    </p>
-    <div class="badges">${labelB}${hedgeB}${tcB}${rtB}</div>
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Primary claim</h3>
-    <div class="compare">
-      <div class="col pre">
-        <h4>Preprint</h4>
-        <p>${escapeHtml(d.pP || '—')}</p>
-        <div class="type">type: ${escapeHtml(d.preT || '?')}</div>
-      </div>
-      <div class="col pub">
-        <h4>Published</h4>
-        <p>${escapeHtml(d.jP || '—')}</p>
-        <div class="type">type: ${escapeHtml(d.pubT || '?')}</div>
-      </div>
+const labelBadge = l => `<span class="badge b-${l}">${cap(l)}</span>`;
+function openModal(id){
+  const d=DATA[id]; if(!d) return;
+  const hed = d[14]==='weakened'?'<span class="badge b-cautious">Wording more cautious</span>'
+           : d[14]==='strengthened'?'<span class="badge b-confident">Wording more confident</span>'
+           : '<span class="badge b-plain">Hedging unchanged</span>';
+  const tc = d[17]===1?`<span class="badge b-type">Type: ${tdisp(d[15])} → ${tdisp(d[16])}</span>`:`<span class="badge b-plain">Type: ${tdisp(d[15])}</span>`;
+  const m=$('#modal');
+  m.innerHTML=`
+    <div class="mhead">
+      <button class="close" onclick="closeModal()">×</button>
+      <h2>${esc(d[3])}</h2>
+      <div class="sub"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))}<br>
+        ${esc(d[5]||d[4]||'')}${d[6]?' · '+esc(d[6]):''}</div>
     </div>
-    ${d.ps1 || d.js1 ? `
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin:18px 0 6px;">Secondary claim 1 ${d.s1L ? '· '+d.s1L : ''} ${d.s1H && d.s1H!=='unchanged' ? '· '+d.s1H : ''}</h3>
-    <div class="compare">
-      <div class="col pre"><h4>Preprint</h4><p>${escapeHtml(d.ps1 || 'NA')}</p></div>
-      <div class="col pub"><h4>Published</h4><p>${escapeHtml(d.js1 || 'NA')}</p></div>
-    </div>` : ''}
-    ${d.ps2 || d.js2 ? `
-    <h3 style="font-size:14px;color:#475569;text-transform:uppercase;letter-spacing:0.05em;margin:18px 0 6px;">Secondary claim 2 ${d.s2L ? '· '+d.s2L : ''} ${d.s2H && d.s2H!=='unchanged' ? '· '+d.s2H : ''}</h3>
-    <div class="compare">
-      <div class="col pre"><h4>Preprint</h4><p>${escapeHtml(d.ps2 || 'NA')}</p></div>
-      <div class="col pub"><h4>Published</h4><p>${escapeHtml(d.js2 || 'NA')}</p></div>
-    </div>` : ''}
-    ${d.rs ? `<div class="reason"><strong>Sonnet reasoning:</strong> ${escapeHtml(d.rs)}</div>` : ''}
-  `;
-  document.getElementById('modalbg').classList.add('show');
+    <div class="mbody">
+      <div class="mbadges">${labelBadge(d[13])}${hed}${tc}</div>
+      <div id="mdetail"><div class="mload">Loading claims…</div></div>
+    </div>`;
+  $('#modalbg').classList.add('show');
+  getDetail(id).then(det=>{
+    const miss='<p style="color:#9aa6b5;font-style:italic">— none extracted —</p>';
+    const block=(label,pre,pub,pill)=>`
+      <div class="claimblock">
+        <div class="ct">${label}${pill?`<span class="pill">${pill}</span>`:''}</div>
+        <div class="cmp">
+          <div class="side"><div class="tag">Preprint</div><p>${pre?esc(pre):miss}</p></div>
+          <div class="side pub"><div class="tag">Published</div><p>${pub?esc(pub):miss}</p></div>
+        </div>
+      </div>`;
+    let html = block('Primary claim', det?det[0]:'', d[22], '');
+    if(det&&(det[1]||det[2])) html+=block('Secondary claim 1', det[1], det[2], d[18]?cap(d[18]):'');
+    if(det&&(det[3]||det[4])) html+=block('Secondary claim 2', det[3], det[4], d[20]?cap(d[20]):'');
+    if(det&&det[5]) html+=`<div class="reason"><div class="ct">Model reasoning (Claude Sonnet 4.6)</div><p>${esc(det[5])}</p></div>`;
+    const doi=u=>u?`<a href="https://doi.org/${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`:'—';
+    html+=`<div class="metatable">
+      <div class="row"><span class="k">Preprint DOI</span><span class="v">${doi(d[1])}</span></div>
+      <div class="row"><span class="k">Published DOI</span><span class="v">${doi(d[2])}</span></div>
+      <div class="row"><span class="k">Days to publication</span><span class="v">${d[10]!=null?d[10]+' days':'—'}</span></div>
+      <div class="row"><span class="k">Journal 2-yr mean citedness</span><span class="v">${d[11]!=null?d[11]:'—'}${d[12]?' ('+d[12]+')':''}</span></div>
+      <div class="row"><span class="k">Abstract similarity (Jaccard)</span><span class="v">${det&&det[11]!=null?det[11]:'—'}</span></div>
+      <div class="row"><span class="k">PubMed ID</span><span class="v">${det&&det[10]?`<a href="https://pubmed.ncbi.nlm.nih.gov/${esc(det[10])}" target="_blank" rel="noopener">${esc(det[10])}</a>`:'—'}</span></div>
+      <div class="row"><span class="k">Posted</span><span class="v">${det&&det[8]?esc(det[8]):'—'}</span></div>
+      <div class="row"><span class="k">Published</span><span class="v">${det&&det[9]?esc(det[9]):'—'}</span></div>
+    </div>`;
+    $('#mdetail').innerHTML=html;
+  });
 }
-
-function closeModal() { document.getElementById('modalbg').classList.remove('show'); }
-
-function escapeHtml(s) {
-  if (s == null) return '';
-  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
-
-document.getElementById('q').addEventListener('input', () => { PAGE = 0; applyFilters(); });
-document.getElementById('closeBtn').addEventListener('click', closeModal);
-document.getElementById('modalbg').addEventListener('click', e => { if (e.target.id === 'modalbg') closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
+function closeModal(){$('#modalbg').classList.remove('show');}
 load();
 </script>
-
 </body>
 </html>
