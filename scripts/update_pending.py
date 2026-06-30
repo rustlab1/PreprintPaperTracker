@@ -2,42 +2,31 @@
 """
 Refresh the "Not assessed yet" list for the Preprint -> Publication site.
 
-What it does
-------------
-bioRxiv links each preprint to its peer-reviewed publication, but that linkage
-lags (often by months). The study corpus (data/index.json) only contains pairs
-that were already linked when the data was harvested, so genuinely-published
-preprints that were linked afterwards are missing.
-
-This script asks bioRxiv's public "published" API for every preprint linked to a
-journal article in a date window, keeps the ones that are NOT already in the
-assessed corpus, and writes them to:
+The assessed corpus (data/index.json) only covers preprints published in a
+journal up to ~Feb 2025. bioRxiv keeps linking older preprints to journal
+articles every day, so anything published since then is "published but not yet
+assessed". This script harvests those from bioRxiv's public "published" API,
+keeps the ones NOT already in the corpus, and writes:
 
     data/pending.json           (one row per pending pair, same schema as index.json,
-                                 with the change label set to "na" = not assessed yet)
+                                 change label = "na" = not assessed yet)
     data/pending_authors.json   (parsed [surname, given] author lists, for name search)
 
-These show up on the site with a "Not assessed yet" tag. They are NOT scored by
-the LLM here — assessment (content change / hedging / claim type) is a separate
-step in the extraction pipeline. Run this whenever you want the site to reflect
-newly-published preprints; re-run the full extraction every few months to move
-them from "pending" into the labelled corpus.
+They show on the site with a "Not assessed yet" tag. No LLM scoring happens here;
+assessment (content change / hedging / claim type) is a separate extraction step.
 
 Usage
 -----
-    python3 scripts/update_pending.py --from 2025-01-01 --to 2026-12-31
+    python3 scripts/update_pending.py                 # default: 2025-03-01 -> today
+    python3 scripts/update_pending.py --from 2025-03-01 --to 2026-12-31
 
 Then:
     git add data/pending.json data/pending_authors.json
     git commit -m "Refresh not-assessed list"
     git push
 
-Notes
------
-* Only the standard library is used (urllib) - no pip install needed.
-* A pair can appear here if it was excluded from the study by a filter
-  (e.g. very short abstract) rather than being brand new; this is rare and
-  harmless for display purposes.
+Only the standard library is used (urllib) - no pip install. Must run from a
+network that can reach api.biorxiv.org (corporate VPNs sometimes block it).
 """
 
 import argparse
@@ -65,7 +54,7 @@ def fetch_published(frm, to):
                 with urllib.request.urlopen(url, timeout=60) as r:
                     payload = json.loads(r.read().decode())
                 break
-            except Exception as e:  # transient network / rate limit
+            except Exception:
                 if attempt == 3:
                     raise
                 time.sleep(2 * (attempt + 1))
@@ -81,11 +70,19 @@ def fetch_published(frm, to):
         print(f"  ...{cursor}/{total}", file=sys.stderr)
         if count == 0 or cursor >= total:
             break
-        time.sleep(0.34)  # be polite to the API
+        time.sleep(0.34)
+
+
+def g(rec, *keys):
+    """First non-empty value among several possible key names (API field names vary)."""
+    for k in keys:
+        v = rec.get(k)
+        if v not in (None, ""):
+            return v
+    return ""
 
 
 def parse_authors(preprint_authors, corresponding):
-    """Parse 'Last, F.; Last, F.' + a corresponding full name into [surname, given]."""
     out = []
     for chunk in (preprint_authors or "").split(";"):
         chunk = chunk.strip()
@@ -98,7 +95,7 @@ def parse_authors(preprint_authors, corresponding):
             out.append([surname, " ".join(given)])
     c = [t for t in re.sub(r"[^a-z]", " ", (corresponding or "").lower()).split() if t]
     if len(c) >= 2:
-        out.append([c[-1], " ".join([c[0]] + c[1:-1])])  # surname = last token
+        out.append([c[-1], " ".join([c[0]] + c[1:-1])])
     elif len(c) == 1:
         out.append([c[0], ""])
     return out
@@ -113,35 +110,44 @@ def days_between(p, j):
 
 def main():
     ap = argparse.ArgumentParser(description="Refresh the not-assessed list.")
-    ap.add_argument("--from", dest="frm", default="2025-01-01", help="publication date from (YYYY-MM-DD)")
+    ap.add_argument("--from", dest="frm", default="2025-03-01", help="publication date from (YYYY-MM-DD)")
     ap.add_argument("--to", dest="to", default=str(date.today()), help="publication date to (YYYY-MM-DD)")
     args = ap.parse_args()
 
-    # DOIs already assessed in the corpus (field [1] = bioRxiv DOI)
     index = json.loads((DATA / "index.json").read_text())
     corpus = {row[1] for row in index}
     print(f"Assessed corpus: {len(corpus):,} pairs. Harvesting bioRxiv publications "
           f"{args.frm} -> {args.to} ...", file=sys.stderr)
 
     pending, pending_authors, seen = [], [], set()
+    n_fetched = n_in_corpus = n_nodoi = 0
     i = 0
     for c in fetch_published(args.frm, args.to):
-        doi = c.get("biorxiv_doi")
-        if not doi or doi in corpus or doi in seen:
+        if n_fetched == 0:  # show the real field names once, for transparency
+            print("First record keys:", sorted(c.keys()), file=sys.stderr)
+        n_fetched += 1
+        doi = g(c, "biorxiv_doi", "preprint_doi", "doi")
+        if not doi:
+            n_nodoi += 1
+            continue
+        if doi in corpus:
+            n_in_corpus += 1
+            continue
+        if doi in seen:
             continue
         seen.add(doi)
-        authors = c.get("preprint_authors", "") or ""
-        corr = c.get("preprint_author_corresponding", "") or ""
-        pdate = c.get("preprint_date", "") or ""
-        jdate = c.get("published_date", "") or ""
+        authors = g(c, "preprint_authors", "authors")
+        corr = g(c, "preprint_author_corresponding", "author_corresponding")
+        pdate = g(c, "preprint_date")
+        jdate = g(c, "published_date")
         year = int(pdate[:4]) if pdate[:4].isdigit() else None
         first = authors.split(";")[0].strip() if authors else ""
         pending.append([
-            PENDING_ID_BASE + i, doi, c.get("published_doi", "") or "",
-            c.get("preprint_title", "") or "", first, corr,
-            c.get("preprint_author_corresponding_institution", "") or "",
-            (c.get("preprint_category", "") or "").lower(),
-            c.get("published_journal", "") or "", year, days_between(pdate, jdate),
+            PENDING_ID_BASE + i, doi, g(c, "published_doi", "journal_doi"),
+            g(c, "preprint_title", "title"), first, corr,
+            g(c, "preprint_author_corresponding_institution", "author_corresponding_institution"),
+            (g(c, "preprint_category", "category") or "").lower(),
+            g(c, "published_journal", "journal"), year, days_between(pdate, jdate),
             None, "",            # impact, quartile (unknown until assessed)
             "na", "na",          # content label / hedging -> not assessed
             "", "", 0,           # preType, pubType, typeChanged
@@ -151,16 +157,21 @@ def main():
         pending_authors.append(parse_authors(authors, corr))
         i += 1
 
+    print(f"Fetched {n_fetched:,} | already in corpus {n_in_corpus:,} | "
+          f"missing DOI {n_nodoi:,} | NEW not-assessed {len(pending):,}", file=sys.stderr)
+
     if not pending:
-        print("WARNING: found 0 new pairs. This almost always means api.biorxiv.org could not be "
-              "reached (corporate VPN / proxy / firewall), not that there is nothing to add.\n"
-              "Leaving the existing data/pending.json UNCHANGED so the current list is not wiped.\n"
-              "Re-run from a network that can reach api.biorxiv.org.", file=sys.stderr)
+        if n_fetched == 0:
+            print("WARNING: could not fetch anything from api.biorxiv.org (likely a VPN / proxy / "
+                  "firewall block). Leaving data/pending.json UNCHANGED. Re-run from an open network.",
+                  file=sys.stderr)
+        else:
+            print("Nothing new to add; left data/pending.json unchanged.", file=sys.stderr)
         return
     (DATA / "pending.json").write_text(json.dumps(pending, separators=(",", ":"), ensure_ascii=False))
     (DATA / "pending_authors.json").write_text(json.dumps(pending_authors, separators=(",", ":"), ensure_ascii=False))
     print(f"Wrote {len(pending):,} not-assessed pairs to data/pending.json", file=sys.stderr)
-    print("Next: git add data/pending.json data/pending_authors.json && git commit && git push", file=sys.stderr)
+    print("Next: git add data/pending.json data/pending_authors.json && git commit -m 'Refresh not-assessed list' && git push", file=sys.stderr)
 
 
 if __name__ == "__main__":
