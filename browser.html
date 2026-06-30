@@ -7,35 +7,39 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap');
   :root{
-    --ink:#16202e; --muted:#5b6b7e; --line:#e6eaf0; --bg:#f6f8fb; --card:#fff;
-    --blue:#1e3a8a; --blue2:#2563eb; --sky:#e8f0fe; --coral:#ff6b6b;
-    --unchanged:#1f9d61; --minor:#d99100; --major:#d6455d;
-    --cautious:#2f6fb0; --confident:#b85c00; --shadow:0 1px 3px rgba(20,40,80,.06),0 8px 24px rgba(20,40,80,.05);
+    --ink:#3a3a52; --muted:#84849b; --line:#ece9f5; --bg:#f8f6fc; --card:#fff;
+    --blue:#5a5fb8; --blue2:#7c80d4; --sky:#eef0fe; --coral:#f1948c;
+    --unchanged:#7bc6a4; --minor:#e7c069; --major:#e1768c; --na:#9a95c4;
+    --cautious:#7c93d6; --confident:#d59a6a; --shadow:0 1px 3px rgba(80,70,140,.05),0 10px 26px rgba(90,80,150,.07);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
-  a{color:var(--blue2);text-decoration:none}a:hover{text-decoration:underline}
+  a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 
-  nav.top{display:flex;justify-content:space-between;align-items:center;padding:16px 32px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
-  nav.top .brand{font-size:17px;font-weight:800;color:var(--blue);display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
-  nav.top .brand .dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--blue));box-shadow:0 0 0 4px rgba(30,58,138,.08)}
+  nav.top{display:flex;justify-content:flex-start;align-items:center;gap:8px;padding:16px 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
   nav.top .links{display:flex;gap:6px}
-  nav.top .links a{color:var(--muted);font-size:14px;font-weight:600;padding:7px 13px;border-radius:8px;transition:.15s}
+  nav.top .links a{color:var(--muted);font-size:14px;font-weight:600;padding:7px 13px;border-radius:9px;transition:.15s}
   nav.top .links a:hover{color:var(--blue);background:var(--sky);text-decoration:none}
   nav.top .links a.active{color:var(--blue);background:var(--sky)}
 
   .wrap{max-width:1180px;margin:0 auto;padding:26px 24px 80px}
-  .head h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
-  .head p{color:var(--muted);font-size:14.5px;max-width:760px}
+  .head h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px;color:#3d3d59}
+  .head p{color:var(--muted);font-size:14.5px;max-width:780px}
 
   .toolbar{position:sticky;top:65px;z-index:40;background:var(--bg);padding:16px 0 10px;margin-top:14px}
   .searchbar{display:flex;gap:10px;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:11px 15px;box-shadow:var(--shadow);transition:.15s}
-  .searchbar:focus-within{border-color:var(--blue2);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+  .searchbar:focus-within{border-color:var(--blue2);box-shadow:0 0 0 4px rgba(124,128,212,.12)}
   .searchbar svg{flex:none;color:var(--muted)}
   .searchbar input{flex:1;border:none;outline:none;font-size:16px;font-family:inherit;color:var(--ink);background:none}
   .searchbar .count{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
-  .hint{font-size:12px;color:var(--muted);margin:8px 2px 0}
+
+  .subsearch{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .field{flex:1 1 250px;display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:9px 13px;transition:.15s}
+  .field:focus-within{border-color:var(--blue2);box-shadow:0 0 0 4px rgba(124,128,212,.1)}
+  .field .fl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--blue);white-space:nowrap}
+  .field input{flex:1;border:none;outline:none;font-size:14.5px;font-family:inherit;background:none;color:var(--ink);min-width:0}
+  .hint{font-size:12px;color:var(--muted);margin:9px 2px 0}
   .hint b{color:var(--blue)}
   .hint .flag{color:var(--coral);font-weight:600}
 
@@ -43,10 +47,10 @@
   .chipset{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .chipset .lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-right:2px}
   .chip{font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:5px 12px;cursor:pointer;transition:.13s;user-select:none}
-  .chip:hover{border-color:#c4d0e0}
+  .chip:hover{border-color:#cfcce2}
   .chip.on{color:#fff;border-color:transparent}
   .chip.on.c-unchanged{background:var(--unchanged)} .chip.on.c-minor{background:var(--minor)} .chip.on.c-major{background:var(--major)}
-  .chip.on.c-cautious{background:var(--cautious)} .chip.on.c-confident{background:var(--confident)} .chip.on.c-type{background:var(--blue)}
+  .chip.on.c-cautious{background:var(--cautious)} .chip.on.c-confident{background:var(--confident)} .chip.on.c-type{background:var(--blue)} .chip.on.c-na{background:var(--na)}
   select{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:7px 10px;cursor:pointer;outline:none}
   select:focus{border-color:var(--blue2)}
   .reset{font-size:12.5px;color:var(--coral);font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit}
@@ -54,20 +58,20 @@
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
   @media(max-width:760px){.grid{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 17px;cursor:pointer;transition:.14s;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .card:hover{transform:translateY(-2px);border-color:#c9d6ea;box-shadow:0 4px 10px rgba(20,40,80,.08),0 14px 32px rgba(20,40,80,.07)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px;cursor:pointer;transition:.14s;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(90,80,150,.09),0 14px 32px rgba(90,80,150,.09)}
   .card .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
-  .stripe.s-unchanged{background:var(--unchanged)} .stripe.s-minor{background:var(--minor)} .stripe.s-major{background:var(--major)}
+  .stripe.s-unchanged{background:var(--unchanged)} .stripe.s-minor{background:var(--minor)} .stripe.s-major{background:var(--major)} .stripe.s-na{background:var(--na)}
   .card h3{font-size:14.5px;font-weight:700;line-height:1.35;margin:0 0 7px;padding-left:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .card .meta{font-size:12.5px;color:var(--muted);padding-left:6px;margin-bottom:9px}
   .card .meta .j{color:var(--ink);font-weight:600}
-  .au-link{color:var(--blue2);cursor:pointer;border-bottom:1px dotted rgba(37,99,235,.4)}
-  .au-link:hover{color:var(--blue)}
+  .au-link{color:var(--blue);cursor:pointer;border-bottom:1px dotted rgba(90,95,184,.4)}
+  .au-link:hover{color:var(--blue2)}
   .badges{display:flex;flex-wrap:wrap;gap:5px;padding-left:6px}
   .badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;letter-spacing:.01em}
-  .b-unchanged{background:#e4f6ec;color:#137a47} .b-minor{background:#fdf1d8;color:#9a6800} .b-major{background:#fbe2e7;color:#b32b44}
-  .b-cautious{background:#e4eef9;color:#22588f} .b-confident{background:#f7e9d6;color:#8f4a00}
-  .b-type{background:#e9e9fb;color:#4b3fb0} .b-plain{background:#eef2f7;color:#56657a}
+  .b-unchanged{background:#e3f5ec;color:#2f9168} .b-minor{background:#fbf0d6;color:#a07b1e} .b-major{background:#fbe5ea;color:#bd5570}
+  .b-cautious{background:#e8edfb;color:#4a5aa8} .b-confident{background:#f8ecdd;color:#a06a32}
+  .b-type{background:#eeecfb;color:#5f59b8} .b-plain{background:#eef0f5;color:#6a6a86} .b-na{background:#ece9f7;color:#5d57a0}
 
   .pager{display:flex;justify-content:center;align-items:center;gap:5px;margin-top:26px;flex-wrap:wrap}
   .pager button{font-family:inherit;font-size:13px;font-weight:600;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;transition:.13s}
@@ -86,31 +90,34 @@
   #loader .ptext{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
   #loader h2{font-size:16px;font-weight:700;color:var(--blue)}
 
-  .modalbg{position:fixed;inset:0;background:rgba(15,25,45,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:36px 18px;overflow-y:auto}
+  .modalbg{position:fixed;inset:0;background:rgba(45,40,75,.45);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:36px 18px;overflow-y:auto}
   .modalbg.show{display:flex}
-  .modal{background:#fff;border-radius:16px;max-width:880px;width:100%;box-shadow:0 24px 70px rgba(10,20,40,.4);animation:pop .22s ease}
+  .modal{background:#fff;border-radius:18px;max-width:880px;width:100%;box-shadow:0 24px 70px rgba(40,30,80,.35);animation:pop .22s ease}
   @keyframes pop{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
   .modal .mhead{padding:24px 28px 18px;border-bottom:1px solid var(--line);position:relative}
-  .modal .mhead h2{font-size:19px;font-weight:800;line-height:1.32;padding-right:34px;letter-spacing:-.01em}
+  .modal .mhead h2{font-size:19px;font-weight:800;line-height:1.32;padding-right:34px;letter-spacing:-.01em;color:#3d3d59}
   .modal .mhead .sub{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6}
   .modal .mhead .sub .j{color:var(--ink);font-weight:600}
   .modal .close{position:absolute;top:20px;right:22px;width:32px;height:32px;border:none;background:var(--bg);border-radius:9px;font-size:19px;color:var(--muted);cursor:pointer;line-height:1;transition:.13s}
-  .modal .close:hover{background:#fbe2e7;color:var(--major)}
+  .modal .close:hover{background:#fbe5ea;color:var(--major)}
   .modal .mbody{padding:20px 28px 28px}
   .mbadges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
   .claimblock{margin-bottom:16px}
   .claimblock .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-  .claimblock .ct .pill{font-size:10px;font-weight:700;background:var(--sky);color:var(--blue2);padding:2px 8px;border-radius:10px;letter-spacing:.02em}
+  .claimblock .ct .pill{font-size:10px;font-weight:700;background:var(--sky);color:var(--blue);padding:2px 8px;border-radius:10px;letter-spacing:.02em}
   .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:640px){.cmp{grid-template-columns:1fr}}
   .cmp .side{background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
-  .cmp .side.pub{background:#f3f8ff;border-color:#dbe8fb}
+  .cmp .side.pub{background:#f1f3fe;border-color:#e3e6fb}
   .cmp .side .tag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
-  .cmp .side.pub .tag{color:var(--blue2)}
+  .cmp .side.pub .tag{color:var(--blue)}
   .cmp .side p{font-size:13.5px;line-height:1.6;color:var(--ink);font-family:'Newsreader',Georgia,serif}
-  .reason{background:#fffaf0;border:1px solid #f3e2c0;border-radius:11px;padding:14px 16px;margin-top:6px}
-  .reason .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#9a6800;margin-bottom:6px}
-  .reason p{font-size:13px;line-height:1.62;color:#5c4a1e;font-family:'Newsreader',Georgia,serif}
+  .reason{background:#fdf6ec;border:1px solid #f3e6cb;border-radius:11px;padding:14px 16px;margin-top:6px}
+  .reason .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#a07b1e;margin-bottom:6px}
+  .reason p{font-size:13px;line-height:1.62;color:#6a5526;font-family:'Newsreader',Georgia,serif}
+  .pendingbox{background:#eef0fe;border:1px solid #dcdcf5;border-radius:11px;padding:14px 16px;margin-bottom:6px}
+  .pendingbox .ct{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px}
+  .pendingbox p{font-size:13px;line-height:1.6;color:#4a4a72}
   .authcloud{margin-top:6px;font-size:12.5px;color:var(--muted);line-height:1.7}
   .metatable{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
   @media(max-width:640px){.metatable{grid-template-columns:1fr}}
@@ -122,7 +129,6 @@
 </head>
 <body>
 <nav class="top">
-  <div class="brand"><span class="dot"></span> Preprint&nbsp;→&nbsp;Publication</div>
   <div class="links">
     <a href="index.html">Overview</a>
     <a href="findings.html">Findings</a>
@@ -140,16 +146,20 @@
 <div class="wrap">
   <div class="head">
     <h1>Browse the dataset</h1>
-    <p>Every one of the 72,644 bioRxiv preprint–publication pairs, with the claim-level labels assigned by Claude Sonnet 4.6. Search every author, the titles, journals, institutions, DOIs, and the extracted primary claims, then open any pair to see the side-by-side claims and the model's reasoning.</p>
+    <p>Every one of the 72,644 bioRxiv preprint–publication pairs, with the claim-level labels assigned by Claude Sonnet 4.6. Search the titles, journals, DOIs, and extracted claims, or use the dedicated author and institution fields. Recently published preprints that postdate the study are shown with a <b>“Not assessed yet”</b> tag and will be labelled in the next update.</p>
   </div>
 
   <div class="toolbar">
     <div class="searchbar">
       <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input id="q" type="search" placeholder="Search any author (e.g. Rust R), a claim, title, journal, institution, or DOI…" autocomplete="off" autofocus>
+      <input id="q" type="search" placeholder="Search claims, titles, journals, or DOI…" autocomplete="off" autofocus>
       <span class="count" id="count"></span>
     </div>
-    <div class="hint">Tip: search an author by surname or <b>Surname Initial</b> (e.g. <b>Rust R</b>), or click any author name to see all their pairs. Surnames match every position in the author list, not just the first author.<span class="flag" id="authflag"> · loading author index…</span></div>
+    <div class="subsearch">
+      <div class="field"><span class="fl">Author</span><input id="qAuthor" type="search" placeholder="surname, or Surname Initial (e.g. Smith A)" autocomplete="off"></div>
+      <div class="field"><span class="fl">Institution</span><input id="qInst" type="search" placeholder="e.g. Stanford, Max Planck, USC…" autocomplete="off"></div>
+    </div>
+    <div class="hint">Author surnames match <b>every position</b> in the author list. Combine fields to pin down one person — e.g. author <b>Smith A</b> + institution <b>Stanford</b> — or click any author name in the results.<span class="flag" id="authflag"> · loading author index…</span></div>
 
     <div class="controls">
       <div class="chipset">
@@ -165,6 +175,7 @@
       </div>
       <div class="chipset">
         <span class="chip c-type" data-f="TC" data-v="1">Claim type changed</span>
+        <span class="chip c-na" data-f="NA" data-v="1">Not assessed yet</span>
       </div>
       <select id="fCat"><option value="">All fields</option></select>
       <select id="fYear"><option value="">All years</option></select>
@@ -191,13 +202,14 @@
 <script>
 /* index schema: [0]id [1]preDOI [2]pubDOI [3]title [4]firstAuthor [5]corr [6]inst [7]cat [8]journal
    [9]year [10]daysToPub [11]impact [12]quartile [13]L [14]H [15]preType [16]pubType [17]typeChanged
-   [18]s1L [19]s1H [20]s2L [21]s2H [22]pubPrimaryClaim
-   detail shard d/{id//1200}.json -> {id:[0 prePrimary,1 preS1,2 pubS1,3 preS2,4 pubS2,5 reasoning,
-                                          6 authors,7 preTitle,8 preDate,9 pubDate,10 pmid,11 jaccard]}
-   authors.json -> [ [surname, given], ... ] per record (lowercased; given may be initials or full names) */
+   [18]s1L [19]s1H [20]s2L [21]s2H [22]pubPrimaryClaim     (L==='na' => not assessed yet)
+   shard d/{id//1200}.json -> {id:[0 prePrimary,1 preS1,2 pubS1,3 preS2,4 pubS2,5 reasoning,
+                                   6 authors,7 preTitle,8 preDate,9 pubDate,10 pmid,11 jaccard]}
+   authors.json / pending_authors.json -> [ [surname, given], ... ] per record */
 const PAGE_SIZE = 24, SHARD = 1200, INDEX_BYTES = 43466195;
-let DATA = [], BLOB = [], AUTHP = [], FILTERED = [], PAGE = 0;
-const state = { q:'', L:new Set(), H:new Set(), TC:false, cat:'', year:'', sort:'yr_desc' };
+let DATA = [], BLOB = [], AUTHP = [], FILTERED = [], PAGE = 0, PENDING_N = 0;
+let IDX = new Map();
+const state = { q:'', au:'', inst:'', L:new Set(), H:new Set(), TC:false, na:false, cat:'', year:'', sort:'yr_desc' };
 const shardCache = {};
 const $ = s => document.querySelector(s);
 const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -211,17 +223,18 @@ function gmatch(qt, giv){
   for(const g of giv.split(' ')){
     if(!g) continue;
     if(qt===g) return true;
-    if(qt.length===1 && g[0]===qt) return true;   // query initial vs given name/initial
-    if(g.length===1 && qt[0]===g) return true;     // query given name vs author initial
+    if(qt.length===1 && g[0]===qt) return true;
+    if(g.length===1 && qt[0]===g) return true;
   }
   return false;
 }
 function amatch(qs, parsed){
+  if(!parsed) return false;
   for(const a of parsed){
     const sur=a[0], giv=a[1]||'';
     for(let i=0;i<qs.length;i++){
       const c=qs[i];
-      if(c.length>=2 && c===sur){                  // surname must be >=2 chars
+      if(c.length>=2 && c===sur){
         let ok=true;
         for(let j=0;j<qs.length;j++){ if(j!==i && !gmatch(qs[j],giv)){ ok=false; break; } }
         if(ok) return true;
@@ -229,6 +242,10 @@ function amatch(qs, parsed){
     }
   }
   return false;
+}
+function authorHit(i, qs, raw){
+  if(AUTHP.length) return amatch(qs, AUTHP[i]);
+  const d=DATA[i]; return ((d[4]+' '+d[5]).toLowerCase()).includes(raw);
 }
 
 async function load(){
@@ -243,14 +260,28 @@ async function load(){
   let size=0; chunks.forEach(c=>size+=c.length);
   const buf=new Uint8Array(size); let off=0; chunks.forEach(c=>{buf.set(c,off);off+=c.length});
   DATA = JSON.parse(new TextDecoder().decode(buf));
-  BLOB = DATA.map(d => (d[3]+' '+d[4]+' '+d[5]+' '+d[6]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase());
+  DATA.forEach(d=>{ BLOB.push((d[3]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase()); IDX.set(d[0],d); });
   buildSelects(); bindUI(); apply();
   const l=$('#loader'); l.style.opacity=0; setTimeout(()=>l.style.display='none',400);
-  // author index loads in the background; full-author search switches on when ready
-  fetch('data/authors.json').then(r=>r.json()).then(a=>{
-    AUTHP=a; const f=$('#authflag'); if(f) f.style.display='none';
-    if(state.q) apply();
-  }).catch(()=>{ const f=$('#authflag'); if(f) f.style.display='none'; });
+  loadExtras();
+}
+
+async function loadExtras(){
+  try{ AUTHP = await fetch('data/authors.json').then(r=>r.json()); }catch(e){ AUTHP=[]; }
+  const f=$('#authflag'); if(f) f.style.display='none';
+  try{
+    const [pj,pa]=await Promise.all([
+      fetch('data/pending.json').then(r=>r.json()),
+      fetch('data/pending_authors.json').then(r=>r.json())
+    ]);
+    pj.forEach((d,k)=>{
+      DATA.push(d); IDX.set(d[0],d);
+      BLOB.push((d[3]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]).toLowerCase());
+      if(AUTHP.length) AUTHP.push(pa[k]||[]);
+    });
+    PENDING_N = pj.length;
+  }catch(e){}
+  apply();
 }
 
 function buildSelects(){
@@ -261,10 +292,14 @@ function buildSelects(){
 }
 
 function bindUI(){
-  let t; $('#q').addEventListener('input', e=>{clearTimeout(t);t=setTimeout(()=>{state.q=e.target.value.trim();PAGE=0;apply();},130);});
+  let t1,t2,t3;
+  $('#q').addEventListener('input', e=>{clearTimeout(t1);t1=setTimeout(()=>{state.q=e.target.value.trim();PAGE=0;apply();},130);});
+  $('#qAuthor').addEventListener('input', e=>{clearTimeout(t2);t2=setTimeout(()=>{state.au=e.target.value.trim();PAGE=0;apply();},130);});
+  $('#qInst').addEventListener('input', e=>{clearTimeout(t3);t3=setTimeout(()=>{state.inst=e.target.value.trim();PAGE=0;apply();},130);});
   document.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
     const f=ch.dataset.f, v=ch.dataset.v;
     if(f==='TC'){state.TC=!state.TC;ch.classList.toggle('on',state.TC);}
+    else if(f==='NA'){state.na=!state.na;ch.classList.toggle('on',state.na);}
     else{ if(state[f].has(v)){state[f].delete(v);ch.classList.remove('on');} else {state[f].add(v);ch.classList.add('on');} }
     PAGE=0;apply();
   }));
@@ -272,33 +307,40 @@ function bindUI(){
   $('#fYear').addEventListener('change',e=>{state.year=e.target.value;PAGE=0;apply();});
   $('#sort').addEventListener('change',e=>{state.sort=e.target.value;PAGE=0;apply();});
   $('#reset').addEventListener('click',()=>{
-    state.q='';state.L.clear();state.H.clear();state.TC=false;state.cat='';state.year='';state.sort='yr_desc';
-    $('#q').value='';$('#fCat').value='';$('#fYear').value='';$('#sort').value='yr_desc';
+    state.q='';state.au='';state.inst='';state.L.clear();state.H.clear();state.TC=false;state.na=false;state.cat='';state.year='';state.sort='yr_desc';
+    $('#q').value='';$('#qAuthor').value='';$('#qInst').value='';$('#fCat').value='';$('#fYear').value='';$('#sort').value='yr_desc';
     document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));PAGE=0;apply();
   });
   $('#modalbg').addEventListener('click',e=>{if(e.target.id==='modalbg')closeModal();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
   const params=new URLSearchParams(location.search);
   const pq=params.get('q'); if(pq){$('#q').value=pq;state.q=pq.trim();}
-  const qid=params.get('id'); if(qid!==null && DATA[+qid]) openModal(+qid);
+  const pa=params.get('author'); if(pa){$('#qAuthor').value=pa;state.au=pa.trim();}
+  const qid=params.get('id'); if(qid!==null && IDX.get(+qid)) openModal(+qid);
 }
 
 function searchAuthor(name){
   closeModal();
-  $('#q').value=name; state.q=name; PAGE=0; apply();
+  $('#qAuthor').value=name; state.au=name; PAGE=0; apply();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 const ORDER={major:3,minor:2,unchanged:1};
 function apply(){
-  const q=state.q.toLowerCase(); const QT = q?qtok(q):[]; const useAuth = AUTHP.length>0 && QT.length>0;
+  const q=state.q.toLowerCase();
+  const au=state.au.toLowerCase(); const AQ = au?qtok(au):[];
+  const inst=state.inst.toLowerCase();
   FILTERED = DATA.filter((d,i)=>{
+    const isna = d[13]==='na';
+    if(state.na){ if(!isna) return false; }
     if(state.L.size && !state.L.has(d[13])) return false;
     if(state.H.size && !state.H.has(d[14])) return false;
     if(state.TC && d[17]!==1) return false;
     if(state.cat && d[7]!==state.cat) return false;
     if(state.year && d[9]!=state.year) return false;
-    if(q && !BLOB[i].includes(q) && !(useAuth && amatch(QT,AUTHP[i]))) return false;
+    if(q && !BLOB[i].includes(q)) return false;
+    if(au && !authorHit(i, AQ, au)) return false;
+    if(inst && !(d[6]||'').toLowerCase().includes(inst)) return false;
     return true;
   });
   const s=state.sort;
@@ -311,7 +353,7 @@ function apply(){
     if(s==='change')return (ORDER[b[13]]||0)-(ORDER[a[13]]||0)||(b[10]||0)-(a[10]||0);
     return 0;
   });
-  $('#count').textContent = FILTERED.length.toLocaleString()+' of '+DATA.length.toLocaleString();
+  $('#count').textContent = FILTERED.length.toLocaleString()+' matches';
   render();
 }
 
@@ -320,16 +362,22 @@ function render(){
   if(!FILTERED.length){grid.innerHTML='<p class="empty">No pairs match your search and filters.</p>';$('#pager').innerHTML='';return;}
   const start=PAGE*PAGE_SIZE, slice=FILTERED.slice(start,start+PAGE_SIZE);
   grid.innerHTML = slice.map(d=>{
-    const tc = d[17]===1 ? `<span class="badge b-type">${tdisp(d[15])} → ${tdisp(d[16])}</span>` : '';
-    const hed = d[14]==='weakened' ? '<span class="badge b-cautious">More cautious</span>'
-             : d[14]==='strengthened' ? '<span class="badge b-confident">More confident</span>' : '';
+    const isna=d[13]==='na';
+    let badges;
+    if(isna){ badges='<span class="badge b-na">⏳ Not assessed yet</span>'; }
+    else{
+      const tc = d[17]===1 ? `<span class="badge b-type">${tdisp(d[15])} → ${tdisp(d[16])}</span>` : '';
+      const hed = d[14]==='weakened' ? '<span class="badge b-cautious">More cautious</span>'
+               : d[14]==='strengthened' ? '<span class="badge b-confident">More confident</span>' : '';
+      badges=`<span class="badge b-${d[13]}">${cap(d[13])}</span>${hed}${tc}`;
+    }
     const imp = d[11]!=null ? ` · impact ${d[11]}` : '';
     const au = d[4] ? `<span class="au-link" data-au="${esc(d[4])}">${esc(d[4])}</span>` : '';
     return `<div class="card" data-id="${d[0]}">
       <div class="stripe s-${d[13]}"></div>
       <h3>${esc(d[3])}</h3>
       <div class="meta"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))} · ${au}${imp}</div>
-      <div class="badges"><span class="badge b-${d[13]}">${cap(d[13])}</span>${hed}${tc}</div>
+      <div class="badges">${badges}</div>
     </div>`;
   }).join('');
   grid.querySelectorAll('.card').forEach(c=>c.addEventListener('click',()=>openModal(+c.dataset.id)));
@@ -356,10 +404,12 @@ async function getDetail(id){
   if(!shardCache[sid]) shardCache[sid]=fetch(`data/d/${sid}.json`).then(r=>r.json());
   const s=await shardCache[sid]; return s[id];
 }
-
+const doiLink=u=>u?`<a href="https://doi.org/${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`:'—';
 const labelBadge = l => `<span class="badge b-${l}">${cap(l)}</span>`;
+
 function openModal(id){
-  const d=DATA[id]; if(!d) return;
+  const d=IDX.get(+id); if(!d) return;
+  if(d[13]==='na'){ openPending(d); return; }
   const hed = d[14]==='weakened'?'<span class="badge b-cautious">Wording more cautious</span>'
            : d[14]==='strengthened'?'<span class="badge b-confident">Wording more confident</span>'
            : '<span class="badge b-plain">Hedging unchanged</span>';
@@ -380,7 +430,7 @@ function openModal(id){
   $('#modalbg').classList.add('show');
   bindAuthLinks(m);
   getDetail(id).then(det=>{
-    const miss='<p style="color:#9aa6b5;font-style:italic">— none extracted —</p>';
+    const miss='<p style="color:#a6a6bd;font-style:italic">— none extracted —</p>';
     const block=(label,pre,pub,pill)=>`
       <div class="claimblock">
         <div class="ct">${label}${pill?`<span class="pill">${pill}</span>`:''}</div>
@@ -398,10 +448,9 @@ function openModal(id){
         .map(n=>`<span class="au-link" data-au="${esc(n)}">${esc(n)}</span>`).join(', ');
       html+=`<div class="claimblock" style="margin-top:18px"><div class="ct">Authors</div><div class="authcloud">${names}</div></div>`;
     }
-    const doi=u=>u?`<a href="https://doi.org/${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`:'—';
     html+=`<div class="metatable">
-      <div class="row"><span class="k">Preprint DOI</span><span class="v">${doi(d[1])}</span></div>
-      <div class="row"><span class="k">Published DOI</span><span class="v">${doi(d[2])}</span></div>
+      <div class="row"><span class="k">Preprint DOI</span><span class="v">${doiLink(d[1])}</span></div>
+      <div class="row"><span class="k">Published DOI</span><span class="v">${doiLink(d[2])}</span></div>
       <div class="row"><span class="k">Days to publication</span><span class="v">${d[10]!=null?d[10]+' days':'—'}</span></div>
       <div class="row"><span class="k">Journal 2-yr mean citedness</span><span class="v">${d[11]!=null?d[11]:'—'}${d[12]?' ('+d[12]+')':''}</span></div>
       <div class="row"><span class="k">Abstract similarity (Jaccard)</span><span class="v">${det&&det[11]!=null?det[11]:'—'}</span></div>
@@ -413,6 +462,36 @@ function openModal(id){
     bindAuthLinks($('#mdetail'));
   });
 }
+
+function openPending(d){
+  const corrLink = d[5]?`<span class="au-link" data-au="${esc(d[5])}">${esc(d[5])}</span>`:(d[4]?`<span class="au-link" data-au="${esc(d[4])}">${esc(d[4])}</span>`:'');
+  const m=$('#modal');
+  m.innerHTML=`
+    <div class="mhead">
+      <button class="close" onclick="closeModal()">×</button>
+      <h2>${esc(d[3])}</h2>
+      <div class="sub"><span class="j">${esc(d[8]||'—')}</span> · ${d[9]||''} · ${esc(cap(d[7]))}<br>
+        ${corrLink}${d[6]?' · '+esc(d[6]):''}</div>
+    </div>
+    <div class="mbody">
+      <div class="mbadges"><span class="badge b-na">⏳ Not assessed yet</span></div>
+      <div class="pendingbox">
+        <div class="ct">Pending assessment</div>
+        <p>This preprint was recently linked to its peer-reviewed publication, after the study corpus was assembled, so its claims have not yet been compared by the Sonnet pipeline. It will be parsed and labelled (content change, hedging, claim type) in the next dataset update.</p>
+      </div>
+      <div class="metatable">
+        <div class="row"><span class="k">Preprint DOI</span><span class="v">${doiLink(d[1])}</span></div>
+        <div class="row"><span class="k">Published DOI</span><span class="v">${doiLink(d[2])}</span></div>
+        <div class="row"><span class="k">Journal</span><span class="v">${esc(d[8]||'—')}</span></div>
+        <div class="row"><span class="k">Field</span><span class="v">${esc(cap(d[7])||'—')}</span></div>
+        <div class="row"><span class="k">Preprint year</span><span class="v">${d[9]||'—'}</span></div>
+        <div class="row"><span class="k">Corresponding author</span><span class="v">${esc(d[5]||d[4]||'—')}</span></div>
+      </div>
+    </div>`;
+  $('#modalbg').classList.add('show');
+  bindAuthLinks(m);
+}
+
 function bindAuthLinks(root){
   root.querySelectorAll('.au-link').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();searchAuthor(el.dataset.au);}));
 }
