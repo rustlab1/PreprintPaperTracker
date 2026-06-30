@@ -332,7 +332,7 @@ function searchAuthor(name){
 
 const ORDER={major:3,minor:2,unchanged:1};
 function apply(){
-  const q=state.q.toLowerCase();
+  const q=state.q.toLowerCase(); const QG = q?qtok(q):[];
   const au=state.au.toLowerCase(); const AQ = au?qtok(au):[];
   const inst=state.inst.toLowerCase();
   FILTERED = DATA.filter((d,i)=>{
@@ -343,7 +343,7 @@ function apply(){
     if(state.TC && d[17]!==1) return false;
     if(state.cat && d[7]!==state.cat) return false;
     if(state.year && d[9]!=state.year) return false;
-    if(q && !BLOB[i].includes(q)) return false;
+    if(q && !BLOB[i].includes(q) && !(AUTHP.length && QG.length && amatch(QG, AUTHP[i]))) return false;
     if(au && !authorHit(i, AQ, au)) return false;
     if(inst && !(d[6]||'').toLowerCase().includes(inst)) return false;
     return true;
