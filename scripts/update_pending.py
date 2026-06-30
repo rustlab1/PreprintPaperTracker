@@ -151,6 +151,12 @@ def main():
         pending_authors.append(parse_authors(authors, corr))
         i += 1
 
+    if not pending:
+        print("WARNING: found 0 new pairs. This almost always means api.biorxiv.org could not be "
+              "reached (corporate VPN / proxy / firewall), not that there is nothing to add.\n"
+              "Leaving the existing data/pending.json UNCHANGED so the current list is not wiped.\n"
+              "Re-run from a network that can reach api.biorxiv.org.", file=sys.stderr)
+        return
     (DATA / "pending.json").write_text(json.dumps(pending, separators=(",", ":"), ensure_ascii=False))
     (DATA / "pending_authors.json").write_text(json.dumps(pending_authors, separators=(",", ":"), ensure_ascii=False))
     print(f"Wrote {len(pending):,} not-assessed pairs to data/pending.json", file=sys.stderr)
