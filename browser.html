@@ -180,11 +180,11 @@
       <select id="fCat"><option value="">All fields</option></select>
       <select id="fYear"><option value="">All years</option></select>
       <select id="sort">
+        <option value="imp_desc">Highest-impact journal</option>
         <option value="yr_desc">Newest preprint</option>
         <option value="yr_asc">Oldest preprint</option>
         <option value="dtp_desc">Longest review</option>
         <option value="dtp_asc">Shortest review</option>
-        <option value="imp_desc">Highest-impact journal</option>
         <option value="change">Biggest change first</option>
       </select>
       <button class="reset" id="reset">Clear all</button>
@@ -209,7 +209,7 @@
 const PAGE_SIZE = 24, SHARD = 1200, INDEX_BYTES = 43466195;
 let DATA = [], BLOB = [], AUTHP = [], FILTERED = [], PAGE = 0, PENDING_N = 0;
 let IDX = new Map();
-const state = { q:'', au:'', inst:'', L:new Set(), H:new Set(), TC:false, na:false, cat:'', year:'', sort:'yr_desc' };
+const state = { q:'', au:'', inst:'', L:new Set(), H:new Set(), TC:false, na:false, cat:'', year:'', sort:'imp_desc' };
 const shardCache = {};
 const $ = s => document.querySelector(s);
 const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -312,8 +312,8 @@ function bindUI(){
   $('#fYear').addEventListener('change',e=>{state.year=e.target.value;PAGE=0;apply();});
   $('#sort').addEventListener('change',e=>{state.sort=e.target.value;PAGE=0;apply();});
   $('#reset').addEventListener('click',()=>{
-    state.q='';state.au='';state.inst='';state.L.clear();state.H.clear();state.TC=false;state.na=false;state.cat='';state.year='';state.sort='yr_desc';
-    $('#q').value='';$('#qAuthor').value='';$('#qInst').value='';$('#fCat').value='';$('#fYear').value='';$('#sort').value='yr_desc';
+    state.q='';state.au='';state.inst='';state.L.clear();state.H.clear();state.TC=false;state.na=false;state.cat='';state.year='';state.sort='imp_desc';
+    $('#q').value='';$('#qAuthor').value='';$('#qInst').value='';$('#fCat').value='';$('#fYear').value='';$('#sort').value='imp_desc';
     document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));PAGE=0;apply();
   });
   $('#modalbg').addEventListener('click',e=>{if(e.target.id==='modalbg')closeModal();});
