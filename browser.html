@@ -260,7 +260,7 @@ async function load(){
   let size=0; chunks.forEach(c=>size+=c.length);
   const buf=new Uint8Array(size); let off=0; chunks.forEach(c=>{buf.set(c,off);off+=c.length});
   DATA = JSON.parse(new TextDecoder().decode(buf));
-  DATA.forEach(d=>{ BLOB.push((d[3]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase()); IDX.set(d[0],d); });
+  DATA.forEach(d=>{ d[7]=(d[7]||'').trim().toLowerCase(); BLOB.push((d[3]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]+' '+d[22]).toLowerCase()); IDX.set(d[0],d); });
   buildSelects(); bindUI(); apply();
   const l=$('#loader'); l.style.opacity=0; setTimeout(()=>l.style.display='none',400);
   loadExtras();
@@ -275,20 +275,25 @@ async function loadExtras(){
       fetch('data/pending_authors.json').then(r=>r.json())
     ]);
     pj.forEach((d,k)=>{
+      d[7]=(d[7]||'').trim().toLowerCase();
       DATA.push(d); IDX.set(d[0],d);
       BLOB.push((d[3]+' '+d[8]+' '+d[7]+' '+d[1]+' '+d[2]).toLowerCase());
       if(AUTHP.length) AUTHP.push(pa[k]||[]);
     });
     PENDING_N = pj.length;
+    buildSelects();   // refresh dropdowns to include any pending-only fields/years
   }catch(e){}
   apply();
 }
 
 function buildSelects(){
+  const curCat=$('#fCat').value, curYr=$('#fYear').value;
   const cats=[...new Set(DATA.map(d=>d[7]).filter(Boolean))].sort();
   const yrs=[...new Set(DATA.map(d=>d[9]).filter(Boolean))].sort((a,b)=>b-a);
-  $('#fCat').insertAdjacentHTML('beforeend', cats.map(c=>`<option value="${esc(c)}">${esc(cap(c))}</option>`).join(''));
-  $('#fYear').insertAdjacentHTML('beforeend', yrs.map(y=>`<option value="${y}">${y}</option>`).join(''));
+  $('#fCat').innerHTML='<option value="">All fields</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(cap(c))}</option>`).join('');
+  $('#fYear').innerHTML='<option value="">All years</option>'+yrs.map(y=>`<option value="${y}">${y}</option>`).join('');
+  if(curCat) $('#fCat').value=curCat;
+  if(curYr) $('#fYear').value=curYr;
 }
 
 function bindUI(){
