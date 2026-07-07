@@ -17,8 +17,8 @@ assessment (content change / hedging / claim type) is a separate extraction step
 
 Usage
 -----
-    python3 scripts/update_pending.py                 # default: 2025-03-01 -> today
-    python3 scripts/update_pending.py --from 2025-03-01 --to 2026-12-31
+    python3 maintenance/update_pending.py                 # default: 2025-03-01 -> today
+    python3 maintenance/update_pending.py --from 2025-03-01 --to 2026-12-31
 
 Then:
     git add data/pending.json data/pending_authors.json

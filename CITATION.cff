@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite the following work."
+title: "Tracking claim changes from preprint to publication across 72,644 biomedical studies using large language models"
+authors:
+  - family-names: Yin
+    given-names: Hao
+    orcid: "https://orcid.org/0000-0002-0018-3228"
+  - family-names: Anh
+    given-names: Woosung
+  - family-names: Forster
+    given-names: Patrycja M.
+  - family-names: Rust
+    given-names: Ruslan
+    orcid: "https://orcid.org/0000-0003-3376-3453"
+year: 2026
+repository-code: "https://github.com/rustlab1/PreprintPaperTracker"
+url: "https://rustlab1.github.io/PreprintPaperTracker/"
