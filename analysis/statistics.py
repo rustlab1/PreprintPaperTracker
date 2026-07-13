@@ -160,18 +160,28 @@ line("journals with an impact value", f"{len(imp):,}", "736")
 line("pairs covered", f"{len(J):,}", "59,012")
 
 # Octiles of journal impact; each point is the mean citedness of a bin, weighted
-# by the number of pairs it contains (identical binning to make_figures.py).
+# by the number of pairs it contains (same binning as make_figures.py).
+#
+# Note on weighting: make_figures.py fits with np.polyfit(..., w=n). numpy treats
+# w as 1/sigma, so passing the bin counts weights each residual by n**2 rather
+# than n. The correct n-weighted fit is used here (WLS, weights=n); it gives a
+# slope of 22.3 against 22.6 for the polyfit call, so the two agree to within
+# 0.4 percentage points and the figure inset is unaffected at its printed
+# precision. Both are reported below.
 J["rev"] = (J.primary_label != "unchanged").astype(int)
 J["bin"] = pd.qcut(np.log10(J.imp), 8, duplicates="drop")
 b = J.groupby("bin", observed=True).agg(x=("imp", "mean"),
                                         y=("rev", lambda s: 100 * s.mean()),
                                         n=("rev", "size"))
-X = sm.add_constant(np.log10(b.x))
-wls = sm.WLS(b.y, X, weights=b.n).fit()
+X = np.log10(b.x.values)
+wls = sm.WLS(b.y.values, sm.add_constant(X), weights=b.n.values).fit()
+poly = np.polyfit(X, b.y.values, 1, w=b.n.values)[0]
+
 line("octiles used", len(b), "8")
-line("slope (pp per 10x citedness)", f"{wls.params.iloc[1]:.1f}", "about 23")
+line("slope, WLS weighted by n", f"{wls.params[1]:.1f}", "about 22")
+line("slope, polyfit as in make_figures.py", f"{poly:.1f}", "(figure inset: 23)")
 line("R-squared", f"{wls.rsquared:.2f}", "0.77")
-line("P value", f"{wls.pvalues.iloc[1]:.3f}", "P < 0.01")
+line("P value", f"{wls.pvalues[1]:.3f}", "P < 0.01")
 
 # ---------------------------------------------------------------- retraction
 head("RETRACTION  (Fig. 2f)")
