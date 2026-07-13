@@ -5,21 +5,23 @@ Data, code, and companion website for
 > Yin H, Anh W, Forster PM, Rust R. Tracking claim changes from preprint to
 > publication across 72,644 biomedical studies using large language models.
 
-Every bioRxiv preprint posted between 2018 and 2025 that could be matched by DOI
-to its peer-reviewed publication was compared at the level of the scientific
-claim. A large language model (Claude Sonnet 4.6) parsed each preprint and
-published abstract into one primary and two secondary claims and labelled every
-pair for content change (unchanged, minor, major), hedging shift (more cautious,
-more confident, unchanged), and claim type. The final corpus contains 72,644
-matched abstract pairs.
+Every bioRxiv preprint published in a peer-reviewed journal between January 2021
+and February 2025 that could be matched to its published version by DOI was
+compared at the level of the scientific claim. A large language model (Claude
+Sonnet 4.6) parsed each preprint and published abstract into one primary and two
+secondary claims and labelled every pair for content change (unchanged, minor,
+major), hedging shift (more cautious, more confident, unchanged), and claim type.
+The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
+2025.
 
 ## Repository structure
 
     analysis/              Materials to reproduce the published analysis
       make_figures.py      Reproduces Figure 1 and Figure 2
+      statistics.py        Reproduces every statistic reported in the paper
       data/                full_corpus_labels.csv, journal_metrics.json
       codebook/            Locked v7.1 prompt and claim definitions
-      validation/          120-pair validation set and its description
+      validation/          Aggregate reliability tables for the 550-pair subsample
       DATA_DICTIONARY.md   Column definitions for full_corpus_labels.csv
       requirements.txt     Python dependencies
 
@@ -31,14 +33,18 @@ matched abstract pairs.
     maintenance/           Ongoing updates to the website, separate from the paper
       update_pending.py
 
-## Reproduce the figures
+## Reproduce
 
     cd analysis
     pip install -r requirements.txt
-    python3 make_figures.py
 
-This writes Figure1_headline and Figure2_drivers to `analysis/figures`, together
-with `figure_stats.txt` listing the values behind each panel.
+    python3 make_figures.py           # Figure 1 and Figure 2 -> analysis/figures
+    python3 statistics.py             # every statistic reported in the paper
+    python3 validation/reliability_from_tables.py   # the reliability values
+
+`make_figures.py` also writes `figure_stats.txt`, listing the values behind each
+panel. `statistics.py` prints each result next to the corresponding value in the
+manuscript.
 
 ## Companion website
 
@@ -62,9 +68,11 @@ temperature 0 with a 1,200-token output limit, returning structured JSON. Conten
 change is labelled unchanged, minor, or major; hedging shift is labelled more
 cautious, unchanged, or more confident; claim type is one of mechanistic,
 associative, descriptive, methodological, therapeutic, or null result.
-Validation on 120 stratified pairs gave model-expert agreement of Cohen's kappa
-0.63 to 0.66 against expert-expert 0.60, with three Sonnet replicates at kappa
-0.75. The full prompt and codebook are in `analysis/codebook`.
+Validation on a stratified subsample of 550 pairs, labelled independently by four
+raters, gave quadratic-weighted Cohen's kappa of 0.76 among the raters
+(Krippendorff's alpha 0.77), 0.76 between the model and the rater consensus, and
+0.67 between the model and individual raters. See `analysis/validation`. The full
+prompt and codebook are in `analysis/codebook`.
 
 ## Citation
 

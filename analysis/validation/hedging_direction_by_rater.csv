@@ -1,0 +1,7 @@
+source,n_more_cautious,n_more_confident,ratio_cautious_to_confident
+R1,49,14,3.5
+R2,59,49,1.2
+R3,42,34,1.24
+R4,69,40,1.73
+raters_pooled,219,137,1.6
+model,92,47,1.96

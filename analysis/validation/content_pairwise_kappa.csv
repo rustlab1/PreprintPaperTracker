@@ -1,0 +1,11 @@
+comparison,type,kappa_quadratic
+R1-R2,rater-rater,0.731
+R1-R3,rater-rater,0.816
+R1-R4,rater-rater,0.747
+R2-R3,rater-rater,0.767
+R2-R4,rater-rater,0.705
+R3-R4,rater-rater,0.789
+model-R1,model-rater,0.681
+model-R2,model-rater,0.639
+model-R3,model-rater,0.712
+model-R4,model-rater,0.646
