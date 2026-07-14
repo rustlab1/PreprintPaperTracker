@@ -26,8 +26,7 @@ D["yr"] = D["posted"].dt.year
 D["maj"] = (D["primary_label"] == "major").astype(int)
 
 # Journal and category strings are case-inconsistent in the bioRxiv metadata
-# (e.g. "Bioinformatics" and "bioinformatics"). Normalise before any grouping,
-# exactly as make_figures.py does.
+# (e.g. "Bioinformatics" and "bioinformatics"). Normalise before any grouping.
 D["journal"] = D.published_journal.astype(str).str.lower().str.strip()
 D["preprint_category"] = D.preprint_category.astype(str).str.lower().str.strip()
 
@@ -159,15 +158,11 @@ J["imp"] = J.journal.map(imp)
 line("journals with an impact value", f"{len(imp):,}", "736")
 line("pairs covered", f"{len(J):,}", "59,012")
 
-# Octiles of journal impact; each point is the mean citedness of a bin, weighted
-# by the number of pairs it contains (same binning as make_figures.py).
-#
-# Note on weighting: make_figures.py fits with np.polyfit(..., w=n). numpy treats
-# w as 1/sigma, so passing the bin counts weights each residual by n**2 rather
-# than n. The correct n-weighted fit is used here (WLS, weights=n); it gives a
-# slope of 22.3 against 22.6 for the polyfit call, so the two agree to within
-# 0.4 percentage points and the figure inset is unaffected at its printed
-# precision. Both are reported below.
+# Octiles of journal impact, each point weighted by the number of pairs it holds.
+# The published figure was fitted with np.polyfit(..., w=n); numpy treats w as
+# 1/sigma, so passing bin counts weights residuals by n**2 rather than n. The
+# correct n-weighted fit (WLS, weights=n) is used here. The two agree to within
+# 0.4 percentage points (22.3 vs 22.6); both are printed below.
 J["rev"] = (J.primary_label != "unchanged").astype(int)
 J["bin"] = pd.qcut(np.log10(J.imp), 8, duplicates="drop")
 b = J.groupby("bin", observed=True).agg(x=("imp", "mean"),
@@ -179,7 +174,7 @@ poly = np.polyfit(X, b.y.values, 1, w=b.n.values)[0]
 
 line("octiles used", len(b), "8")
 line("slope, WLS weighted by n", f"{wls.params[1]:.1f}", "about 22")
-line("slope, polyfit as in make_figures.py", f"{poly:.1f}", "(figure inset: 23)")
+line("slope, polyfit weighting (as published)", f"{poly:.1f}", "(agrees to 0.4 pp)")
 line("R-squared", f"{wls.rsquared:.2f}", "0.77")
 line("P value", f"{wls.pvalues[1]:.3f}", "P < 0.01")
 

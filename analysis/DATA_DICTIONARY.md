@@ -17,7 +17,7 @@
 | year | Year of preprint posting. |
 | primary_label | Content change of the primary claim: unchanged, minor, major. |
 | primary_hedging | Hedging shift of the primary claim: unchanged, weakened (more cautious), strengthened (more confident), or NA. |
-| preprint_primary_type | Claim type of the primary claim in the preprint: mechanism, association, descriptive, method, therapeutic, null_result. |
+| preprint_primary_type | Claim type of the primary claim in the preprint. Six main types: mechanism, association, descriptive, method, therapeutic, null_result. A small residual (0.5% of pairs) carries other codebook categories: applied_implication, predictive, moderator, causal-necessity. |
 | published_primary_type | Claim type of the primary claim in the publication. |
 | s1_label | Content change of the first secondary claim. |
 | s1_hedging | Hedging shift of the first secondary claim. |

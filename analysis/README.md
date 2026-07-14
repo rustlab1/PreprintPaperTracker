@@ -4,7 +4,6 @@ Materials to reproduce the published analysis.
 
 ## Contents
 
-    make_figures.py               Reproduces Figure 1 and Figure 2
     statistics.py                 Reproduces every statistic reported in the paper
     data/full_corpus_labels.csv   72,644 preprint-publication pairs with labels
     data/journal_metrics.json     Journal to OpenAlex 2-year mean citedness
@@ -18,14 +17,8 @@ Materials to reproduce the published analysis.
 
     pip install -r requirements.txt
 
-    python3 make_figures.py                        # Figure 1 and Figure 2
     python3 statistics.py                          # all reported statistics
     python3 validation/reliability_from_tables.py  # reliability values
-
-`make_figures.py` creates `figures/` and writes Figure1_headline and
-Figure2_drivers (vector PDF with embedded fonts, plus PNG), together with
-`figure_stats.txt` listing the values behind each panel. These outputs are not
-tracked in the repository; run the script to generate them.
 
 `statistics.py` and `reliability_from_tables.py` print each value next to the
 corresponding value in the manuscript.

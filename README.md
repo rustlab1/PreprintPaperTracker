@@ -17,7 +17,6 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
 ## Repository structure
 
     analysis/              Materials to reproduce the published analysis
-      make_figures.py      Reproduces Figure 1 and Figure 2
       statistics.py        Reproduces every statistic reported in the paper
       data/                full_corpus_labels.csv, journal_metrics.json
       codebook/            Locked v7.1 prompt and claim definitions
@@ -27,7 +26,7 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
 
     index.html             Companion website (entry point)
     browser.html           Searchable browser over all 72,644 pairs
-    findings.html          Interactive versions of Figure 1 and Figure 2
+    findings.html          Interactive versions of the main figures
     data/                  Website data (index.json, detail shards, stats.json)
 
     maintenance/           Ongoing updates to the website, separate from the paper
@@ -38,14 +37,10 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
     cd analysis
     pip install -r requirements.txt
 
-    python3 make_figures.py           # Figure 1 and Figure 2 -> analysis/figures
     python3 statistics.py             # every statistic reported in the paper
     python3 validation/reliability_from_tables.py   # the reliability values
 
-`make_figures.py` creates `analysis/figures/` and also writes `figure_stats.txt`,
-listing the values behind each panel; these outputs are generated on demand and
-are not tracked here. `statistics.py` prints each result next to the corresponding
-value in the manuscript.
+Both scripts print each result next to the corresponding value in the manuscript.
 
 ## Companion website
 

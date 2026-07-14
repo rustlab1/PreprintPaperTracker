@@ -87,7 +87,7 @@
 <div class="hero">
   <h1>Peer review leaves the central claims of most biomedical preprints intact</h1>
   <p>A claim-level comparison of 72,644 bioRxiv preprints with their peer-reviewed publications, labelled by a large language model.</p>
-  <div class="by">Hao Yin &amp; Ruslan Rust · bioRxiv 2018–2025 · Claude Sonnet 4.6</div>
+  <div class="by">Hao Yin, Woosung Anh, Patrycja M. Forster &amp; Ruslan Rust · Claude Sonnet 4.6</div>
 </div>
 
 <div class="wrap">
@@ -118,7 +118,7 @@
   <section class="block">
     <div class="eyebrow">Caution scales with revision · Figure 1c</div>
     <h2>The bigger the revision, the more the wording softens</h2>
-    <p class="lead">Among unchanged abstracts the certainty of the claim almost never moved. Among <b>majorly revised</b> claims, the wording became more cautious in 38.5% and more confident in only 19.8% of assessable cases.</p>
+    <p class="lead">Among <b>majorly revised</b> claims, the wording became more cautious in 38.5% and more confident in only 19.8% of assessable cases. Claims labelled unchanged in content carry no hedging shift by definition, so the comparison runs between the minor and major strata.</p>
     <div class="figrow">
       <div class="fig"><div class="panel-h">c · Hedging direction within each content-change stratum</div><div class="canvas-box"><canvas id="c_1c"></canvas></div>
         <div class="cap">Percent of claims with an assessable hedging label that became more cautious (blue) or more confident (orange).</div></div>
@@ -173,25 +173,25 @@
 
     <div class="figrow">
       <div class="fig"><div class="panel-h">e · Any revision vs journal impact (2-yr mean citedness, log scale)</div><div class="canvas-box"><canvas id="c_2e"></canvas></div>
-        <div class="cap">Revision rose ~<b>23 percentage points per tenfold</b> increase in journal impact (weighted fit R²=0.77; 59,012 pairs, 908 journals).</div></div>
+        <div class="cap">Revision rose ~<b>22 percentage points per tenfold</b> increase in journal impact (weighted fit R²=0.77; 59,012 pairs, 736 journals).</div></div>
       <div class="fig"><div class="panel-h">f · Retraction rate: preprinted vs never-preprinted</div><div class="canvas-box"><canvas id="c_2f"></canvas></div>
-        <div class="cap">Papers never posted as preprints were retracted about <b>twice as often</b> (18.7 vs 8.1 per 10,000; rate ratio 2.31, 95% CI 1.20–4.45, P=0.003).</div></div>
+        <div class="cap">Papers never posted as preprints were retracted about <b>twice as often</b> (18.7 vs 8.1 per 10,000; rate ratio 2.31, 95% CI 1.20–4.45, P=0.007).</div></div>
     </div>
   </section>
 
   <!-- VALIDATION -->
   <section class="block">
     <div class="eyebrow">Validation · Suppl. Figure 2</div>
-    <h2>The model agrees with experts as well as experts agree with each other</h2>
-    <p class="lead">On a stratified subsample of 120 pairs, model–expert agreement (Cohen's κ 0.63–0.66) matched the agreement between the two domain experts (κ 0.60). Three replicate model runs agreed at κ=0.75.</p>
+    <h2>The model agrees with the raters as well as the raters agree with each other</h2>
+    <p class="lead">Four raters independently labelled a stratified subsample of <b>550 pairs</b>, blind to the model. They agreed at a quadratic-weighted Cohen's κ of <b>0.76</b> (Krippendorff's α 0.77). The model reached <b>κ 0.76</b> against the rater consensus and <b>0.67</b> against individual raters, and was within one ordinal level of the consensus on 98.9% of pairs.</p>
     <div class="fig" style="margin-top:14px"><div class="canvas-box"><canvas id="c_kappa"></canvas></div></div>
   </section>
 
   <div class="footer">
-    <p>Every number on this page is computed directly from the 72,644-pair dataset and matches <b>Yin &amp; Rust, “Tracking claim changes from preprint to publication.”</b></p>
+    <p>Every number on this page is computed directly from the 72,644-pair dataset and matches <b>Yin, Anh, Forster &amp; Rust, “Tracking claim changes from preprint to publication.”</b></p>
     <div class="pill-row">
-      <span class="pill">72,644 pairs</span><span class="pill">2018–2025</span><span class="pill">3,442 journals</span>
-      <span class="pill">25 fields</span><span class="pill">Claude Sonnet 4.6</span>
+      <span class="pill">72,644 pairs</span><span class="pill">posted 2018–2025</span><span class="pill">3,149 journals</span>
+      <span class="pill">27 fields</span><span class="pill">Claude Sonnet 4.6</span>
     </div>
     <p style="margin-top:16px"><a href="browser.html">→ Explore the full dataset</a></p>
   </div>
@@ -303,9 +303,9 @@ function draw(S){
     plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>` ${cx.parsed.y} per 10,000`}}}}});
   // kappa
   const k=S.kappa;
-  new Chart(c('c_kappa'),{type:'bar',data:{labels:['Expert vs expert','Model vs expert (low)','Model vs expert (high)','Model run vs run'],
-    datasets:[{data:[k.expert_expert,k.model_expert_lo,k.model_expert_hi,k.within_sonnet],
-      backgroundColor:[C.muted,C.blue2,C.blue,C.unchanged],borderRadius:6,barThickness:60}]},
+  new Chart(c('c_kappa'),{type:'bar',data:{labels:['Rater vs rater','Model vs rater consensus','Model vs individual rater'],
+    datasets:[{data:[k.rater_rater,k.model_consensus,k.model_rater],
+      backgroundColor:[C.muted,C.blue,C.blue2],borderRadius:6,barThickness:60}]},
     options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{max:1,title:{display:true,text:"Cohen's κ"}}},
       plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>` κ = ${cx.parsed.x}`}}}}});
 

@@ -158,9 +158,9 @@
   <div class="methods">
     <h2>How the dataset was built</h2>
     <div class="grid">
-      <div class="m"><div class="h">Corpus</div><p>Every bioRxiv preprint posted 2018–2025 matched by DOI to its peer-reviewed publication. English abstracts ≥100 characters; first preprint version only. 72,644 pairs across 3,442 journals and 25 fields.</p></div>
+      <div class="m"><div class="h">Corpus</div><p>Every bioRxiv preprint published in a peer-reviewed journal between January 2021 and February 2025, matched by DOI to its preprint (posted 2018–2025). English abstracts ≥100 characters; first preprint version only. 72,644 pairs across 3,149 journals and 27 fields.</p></div>
       <div class="m"><div class="h">Labelling</div><p>Claude Sonnet 4.6 (temperature 0, locked v7.1 codebook) parsed each abstract pair into one primary and two secondary claims, then classified content change and hedging shift.</p></div>
-      <div class="m"><div class="h">Validation</div><p>On 120 stratified pairs, model–expert agreement (κ 0.63–0.66) matched expert–expert agreement (κ 0.60); replicate model runs agreed at κ=0.75.</p></div>
+      <div class="m"><div class="h">Validation</div><p>On 550 stratified pairs labelled independently by four raters, the model reached quadratic-weighted κ 0.76 against the rater consensus and 0.67 against individual raters; the raters agreed at κ 0.76 (Krippendorff's α 0.77).</p></div>
     </div>
   </div>
 
