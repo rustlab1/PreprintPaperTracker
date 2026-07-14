@@ -42,9 +42,10 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
     python3 statistics.py             # every statistic reported in the paper
     python3 validation/reliability_from_tables.py   # the reliability values
 
-`make_figures.py` also writes `figure_stats.txt`, listing the values behind each
-panel. `statistics.py` prints each result next to the corresponding value in the
-manuscript.
+`make_figures.py` creates `analysis/figures/` and also writes `figure_stats.txt`,
+listing the values behind each panel; these outputs are generated on demand and
+are not tracked here. `statistics.py` prints each result next to the corresponding
+value in the manuscript.
 
 ## Companion website
 
