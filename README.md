@@ -2,13 +2,13 @@
 
 Data, code, and companion website for
 
-> Yin H, Anh W, Forster PM, Rust R. Tracking claim changes from preprint to
+> Yin H, Ahn W, Forster PM, Rust R. Tracking claim changes from preprint to
 > publication across 72,644 biomedical studies using large language models.
 
 Every bioRxiv preprint published in a peer-reviewed journal between January 2021
 and February 2025 that could be matched to its published version by DOI was
 compared at the level of the scientific claim. A large language model (Claude
-Sonnet 4.6) parsed each preprint and published abstract into one primary and two
+Sonnet 4.6) parsed each preprint and published abstract into one primary and up to two
 secondary claims and labelled every pair for content change (unchanged, minor,
 major), hedging shift (more cautious, more confident, unchanged), and claim type.
 The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
@@ -17,10 +17,11 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
 ## Repository structure
 
     analysis/              Materials to reproduce the published analysis
-      statistics.py        Reproduces every statistic reported in the paper
+      statistics.py        Reproduces the statistics reported in the paper
       data/                full_corpus_labels.csv, journal_metrics.json
       codebook/            Locked v7.1 prompt and claim definitions
       validation/          Aggregate reliability tables for the 550-pair subsample
+      revision/            Analyses added during peer review (see revision/README.md)
       DATA_DICTIONARY.md   Column definitions for full_corpus_labels.csv
       requirements.txt     Python dependencies
 

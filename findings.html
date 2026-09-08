@@ -144,7 +144,7 @@
   <section class="block">
     <div class="eyebrow">Claim types · Figure 1f</div>
     <h2>The kind of claim almost never changes</h2>
-    <p class="lead">The primary claim type was preserved in <b>96.5%</b> of pairs. Among the few that did change type, transitions ran mostly between adjacent categories — for example mechanistic to descriptive or associative — rather than collapsing to a null result.</p>
+    <p class="lead">Among the 71,055 pairs whose primary claim was present on both sides and carried a valid type, the claim type was preserved in <b>97.7%</b>. Among the 1,605 that did change type, transitions ran mostly between adjacent categories — for example mechanistic to descriptive or associative — rather than collapsing to a null result.</p>
     <div class="fig" style="margin-top:16px"><div class="panel-h">f · Primary claim-type transitions among pairs whose type changed</div>
       <svg id="alluvial" class="alluvial" viewBox="0 0 720 420" preserveAspectRatio="xMidYMid meet"></svg>
       <div class="cap">Band width is proportional to the number of pairs. <b>Descriptive</b> claims show the largest net gain; <b>mechanistic</b> claims are the most often reclassified.</div></div>
@@ -173,9 +173,9 @@
 
     <div class="figrow">
       <div class="fig"><div class="panel-h">e · Any revision vs journal impact (2-yr mean citedness, log scale)</div><div class="canvas-box"><canvas id="c_2e"></canvas></div>
-        <div class="cap">Revision rose ~<b>22 percentage points per tenfold</b> increase in journal impact (weighted fit R²=0.77; 59,012 pairs, 736 journals).</div></div>
-      <div class="fig"><div class="panel-h">f · Retraction rate: preprinted vs never-preprinted</div><div class="canvas-box"><canvas id="c_2f"></canvas></div>
-        <div class="cap">Papers never posted as preprints were retracted about <b>twice as often</b> (18.7 vs 8.1 per 10,000; rate ratio 2.31, 95% CI 1.20–4.45, P=0.007).</div></div>
+        <div class="cap">Revision rises with journal impact and is <b>not linear</b>: a grouped binomial fractional-polynomial model (powers −0.5 and 0) over 59,012 pairs in 736 journals puts the fitted revision probability at <b>53.8%</b> at citedness 2 and <b>67.5%</b> at citedness 10 (OR 1.78, robust 95% CI 1.39–2.29).</div></div>
+      <div class="fig"><div class="panel-h">f · Retraction rate: bioRxiv-linked vs not linked</div><div class="canvas-box"><canvas id="c_2f"></canvas></div>
+        <div class="cap">In an article-level cohort of 399,928 papers published 2021–2024 in 47 journals, retraction was <b>less</b> frequent among bioRxiv-linked articles (0.79 vs 5.20 per 10,000 article-years; hazard ratio <b>0.22</b>, 95% CI 0.10–0.50, Cox model stratified by journal and publication year). Exploratory; 6 events in the linked group.</div></div>
     </div>
   </section>
 
@@ -288,19 +288,23 @@ function draw(S){
   ]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true,title:{display:true,text:'Review-time tertile (median days)'}},y:{stacked:true,max:100,title:{display:true,text:'% of pairs'}}},
     plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12}},tooltip:{callbacks:{label:cx=>` ${cx.dataset.label}: ${cx.parsed.y}%`}}}}});
   // 2e impact scatter (bubble) + fit
-  const oc=S.fig2e.octiles;
-  new Chart(c('c_2e'),{type:'bubble',data:{datasets:[{label:'Journal octile',
-    data:oc.map(o=>({x:o.mean_cites,y:o.revision,r:Math.max(5,Math.sqrt(o.n)/22)})),
-    backgroundColor:'rgba(37,99,235,.35)',borderColor:C.blue2,borderWidth:1.5}]},
+  const je=S.fig2e;
+  new Chart(c('c_2e'),{data:{datasets:[
+    {type:'line',label:'Fitted FP2 model',data:je.fit,parsing:false,borderColor:C.blue2,borderWidth:2.5,pointRadius:0,tension:.3,order:0},
+    {type:'bubble',label:'Journal',
+     data:je.journals.map(o=>({x:o.x,y:o.y,r:Math.max(2,Math.sqrt(o.n)/6),n:o.n})),
+     backgroundColor:'rgba(37,99,235,.18)',borderColor:'rgba(37,99,235,.45)',borderWidth:.5,order:1}
+  ]},
     options:{responsive:true,maintainAspectRatio:false,
       scales:{x:{type:'logarithmic',title:{display:true,text:'Journal 2-yr mean citedness (log)'}},y:{title:{display:true,text:'% with any revision'}}},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>` impact ${cx.raw.x}, revision ${cx.raw.y}%, n=${oc[cx.dataIndex].n}`}}}}});
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>cx.dataset.type==='line'
+        ? ` fitted ${cx.parsed.y}%` : ` impact ${cx.raw.x}, revision ${cx.raw.y}%, n=${cx.raw.n}`}}}}});
   // 2f retraction
   const f=S.fig2f;
-  new Chart(c('c_2f'),{type:'bar',data:{labels:['Preprinted','Never preprinted'],datasets:[
-    {data:[f.preprinted_per_10k,f.nonpreprinted_per_10k],backgroundColor:[C.blue2,C.major],borderRadius:6,barThickness:74}
-  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'retractions per 10,000 papers'}}},
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>` ${cx.parsed.y} per 10,000`}}}}});
+  new Chart(c('c_2f'),{type:'bar',data:{labels:['bioRxiv-linked','Not linked'],datasets:[
+    {data:[f.linked_per_10k_article_years,f.unlinked_per_10k_article_years],backgroundColor:[C.blue2,C.major],borderRadius:6,barThickness:74}
+  ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'retractions per 10,000 article-years'}}},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:cx=>` ${cx.parsed.y} per 10,000 article-years`}}}}});
   // kappa
   const k=S.kappa;
   new Chart(c('c_kappa'),{type:'bar',data:{labels:['Rater vs rater','Model vs rater consensus','Model vs individual rater'],

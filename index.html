@@ -140,8 +140,8 @@
   <div class="twocol">
     <div class="panel">
       <h2>In brief</h2>
-      <p class="abstract">Preprints now disseminate a large share of biomedical research before peer review, and are often regarded as unverified. We compiled every bioRxiv preprint posted between 2018 and 2025 that we could match by DOI to a peer-reviewed version, yielding <span class="em">72,644 pairs</span>, and used Claude Sonnet 4.6 to parse each abstract pair into one primary and two secondary claims, classifying content change and hedging shift.</p>
-      <p class="abstract">Most central claims changed little: <span class="em">39.9% unchanged, 50.0% minor, 10.2% major</span>. Hedging shifts were uncommon and asymmetric — twice as many claims became more cautious as more confident. Major revisions were more frequent after long peer review and declined over the study period. Papers never posted as preprints were retracted at roughly twice the rate of those that were. The move from preprint to publication leaves the central claims of most biomedical abstracts intact.</p>
+      <p class="abstract">Preprints now disseminate a large share of biomedical research before peer review, and are often regarded as unverified. We compiled every bioRxiv preprint posted between 2018 and 2025 that we could match by DOI to a peer-reviewed version, yielding <span class="em">72,644 pairs</span>, and used Claude Sonnet 4.6 to parse each abstract pair into one primary and up to two secondary claims, classifying content change and hedging shift.</p>
+      <p class="abstract">Most central claims changed little: <span class="em">39.9% unchanged, 50.0% minor, 10.2% major</span>. Hedging shifts were uncommon and asymmetric — twice as many claims became more cautious as more confident. Major revisions were more frequent after long peer review and declined over the study period. In an exploratory time-to-event analysis, articles linked to a bioRxiv preprint were retracted less often than those without an identified preprint. The move from preprint to publication leaves the central claims of most biomedical abstracts intact.</p>
     </div>
     <div class="panel">
       <h2>Key findings</h2>
@@ -150,7 +150,7 @@
         <div class="kf"><span class="dot" style="background:var(--amber)"></span><div><b>Wording softens.</b> When language shifts, it turns cautious twice as often as confident (8.4% vs 4.2%).</div></div>
         <div class="kf"><span class="dot" style="background:var(--rose)"></span><div><b>Revision tracks review.</b> Major change rises from 7.0% after fast review to 14.1% after the slowest.</div></div>
         <div class="kf"><span class="dot" style="background:var(--indigo)"></span><div><b>It's falling over time.</b> Major revision dropped from 17.0% (2019) to 5.7% (2024).</div></div>
-        <div class="kf"><span class="dot" style="background:var(--coral)"></span><div><b>Preprints aren't riskier.</b> Never-preprinted papers were retracted ~2× as often.</div></div>
+        <div class="kf"><span class="dot" style="background:var(--coral)"></span><div><b>Preprints aren't riskier.</b> Retraction was less frequent among bioRxiv-linked articles (hazard ratio 0.22; exploratory).</div></div>
       </div>
     </div>
   </div>
@@ -159,7 +159,7 @@
     <h2>How the dataset was built</h2>
     <div class="grid">
       <div class="m"><div class="h">Corpus</div><p>Every bioRxiv preprint published in a peer-reviewed journal between January 2021 and February 2025, matched by DOI to its preprint (posted 2018–2025). English abstracts ≥100 characters; first preprint version only. 72,644 pairs across 3,149 journals and 27 fields.</p></div>
-      <div class="m"><div class="h">Labelling</div><p>Claude Sonnet 4.6 (temperature 0, locked v7.1 codebook) parsed each abstract pair into one primary and two secondary claims, then classified content change and hedging shift.</p></div>
+      <div class="m"><div class="h">Labelling</div><p>Claude Sonnet 4.6 (temperature 0, locked v7.1 codebook) parsed each abstract pair into one primary and up to two secondary claims, then classified content change and hedging shift.</p></div>
       <div class="m"><div class="h">Validation</div><p>On 550 stratified pairs labelled independently by four raters, the model reached quadratic-weighted κ 0.76 against the rater consensus and 0.67 against individual raters; the raters agreed at κ 0.76 (Krippendorff's α 0.77).</p></div>
     </div>
   </div>

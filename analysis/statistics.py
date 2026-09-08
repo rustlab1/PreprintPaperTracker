@@ -2,9 +2,14 @@
 """
 statistics.py
 -------------
-Reproduces every statistic reported in the paper from data/full_corpus_labels.csv
+Reproduces the statistics reported in the paper from data/full_corpus_labels.csv
 and data/journal_metrics.json. Each value is printed next to the value given in
 the manuscript.
+
+The analyses added during revision live in revision/. Those that need inputs
+beyond full_corpus_labels.csv (the retraction cohort, the blind extraction
+sample) are documented in revision/README.md; this script reads their result
+tables where it reports their values.
 
     python statistics.py
 
@@ -16,7 +21,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-from scipy.stats import binomtest, chi2_contingency, fisher_exact
+from scipy.stats import binomtest, chi2, chi2_contingency
 
 HERE = Path(__file__).parent
 D = pd.read_csv(HERE / "data" / "full_corpus_labels.csv")
@@ -83,10 +88,24 @@ r = g.groupby("preprint_category").primary_hedging.agg(
     lambda x: (x == "strengthened").sum() / max((x == "weakened").sum(), 1))
 line("fields with confident:cautious ratio < 1", f"{int((r < 1).sum())} of {len(r)}", "all 17")
 
-ct = D.dropna(subset=["preprint_primary_type", "published_primary_type"])
+# Claim-type transitions are only interpretable when the same claim is present
+# on both sides, so the revised analysis excludes pairs whose primary claim was
+# replaced, added or removed, and pairs without a valid type on both sides.
+# Replacement is not a column here; it is reconstructed from the missing hedging
+# label, which the codebook assigns to exactly those pairs. That reconstruction
+# gives a denominator of 70,974 against the 71,055 reported in the paper, an
+# 81-pair difference; the transition count and the preserved percentage are
+# unaffected.
+VALID_TYPES = {"mechanism", "association", "descriptive",
+               "method", "therapeutic", "null_result"}
+typed = (D.preprint_primary_type.isin(VALID_TYPES)
+         & D.published_primary_type.isin(VALID_TYPES))
+ct = D[typed & D.primary_hedging.notna()]
 same = (ct.preprint_primary_type == ct.published_primary_type)
-line("primary claim type preserved", f"{100 * same.mean():.1f}%", "96.6%")
-line("claim-type changes", f"{int((~same).sum()):,}", "2,498")
+line("pairs in the restricted analysis", f"{len(ct):,}", "71,055")
+line("primary claim type preserved", f"{100 * same.mean():.1f}%", "97.7%")
+line("claim-type changes", f"{int((~same).sum()):,}", "1,605")
+line("claim-type changes, share", f"{100 * (~same).mean():.1f}%", "2.3%")
 
 for t, paper in [("method", "5.4%"), ("descriptive", "11.4%"),
                  ("association", "11.5%"), ("mechanism", "11.9%")]:
@@ -158,39 +177,63 @@ J["imp"] = J.journal.map(imp)
 line("journals with an impact value", f"{len(imp):,}", "736")
 line("pairs covered", f"{len(J):,}", "59,012")
 
-# Octiles of journal impact, each point weighted by the number of pairs it holds.
-# The published figure was fitted with np.polyfit(..., w=n); numpy treats w as
-# 1/sigma, so passing bin counts weights residuals by n**2 rather than n. The
-# correct n-weighted fit (WLS, weights=n) is used here. The two agree to within
-# 0.4 percentage points (22.3 vs 22.6); both are printed below.
+# Journal-level grouped binomial model. Mean citedness enters continuously and
+# its functional form is chosen by fractional polynomials over the standard
+# power set with degree capped at FP2. The selected model has powers
+# (-0.5, 0). This replaces the octile-binned weighted linear fit reported in
+# the original submission.
 J["rev"] = (J.primary_label != "unchanged").astype(int)
-J["bin"] = pd.qcut(np.log10(J.imp), 8, duplicates="drop")
-b = J.groupby("bin", observed=True).agg(x=("imp", "mean"),
-                                        y=("rev", lambda s: 100 * s.mean()),
-                                        n=("rev", "size"))
-X = np.log10(b.x.values)
-wls = sm.WLS(b.y.values, sm.add_constant(X), weights=b.n.values).fit()
-poly = np.polyfit(X, b.y.values, 1, w=b.n.values)[0]
+g = (J.groupby("journal")
+       .agg(n=("rev", "size"), k=("rev", "sum"), imp=("imp", "first"))
+       .reset_index())
 
-line("octiles used", len(b), "8")
-line("slope, WLS weighted by n", f"{wls.params[1]:.1f}", "about 22")
-line("slope, polyfit weighting (as published)", f"{poly:.1f}", "(agrees to 0.4 pp)")
-line("R-squared", f"{wls.rsquared:.2f}", "0.77")
-line("P value", f"{wls.pvalues[1]:.3f}", "P < 0.01")
+
+def fp_design(v, powers):
+    v = np.asarray(v, dtype=float)
+    f = lambda p: np.log(v) if p == 0 else v ** p          # noqa: E731
+    return sm.add_constant(np.column_stack([f(powers[0]), f(powers[1])]),
+                           has_constant="add")
+
+
+resp = np.column_stack([g.k, g.n - g.k])
+fp2 = sm.GLM(resp, fp_design(g.imp, (-0.5, 0)), family=sm.families.Binomial()).fit()
+lin = sm.GLM(resp, sm.add_constant(g.imp.values), family=sm.families.Binomial()).fit()
+
+pr = lambda v: fp2.predict(fp_design([v], (-0.5, 0)))[0]   # noqa: E731
+odds = lambda q: q / (1 - q)                               # noqa: E731
+gstat = lin.deviance - fp2.deviance
+
+line("journals in the model", f"{len(g):,}", "736")
+line("selected FP2 powers", "(-0.5, 0)", "(-0.5, 0)")
+line("revision probability at citedness 2", f"{pr(2) * 100:.1f}%", "53.8%")
+line("revision probability at citedness 10", f"{pr(10) * 100:.1f}%", "67.5%")
+line("odds ratio, citedness 10 vs 2", f"{odds(pr(10)) / odds(pr(2)):.2f}", "1.78")
+line("FP2 vs linear", f"chi2={gstat:.1f}, P={chi2.sf(gstat, 1):.3g}", "P < 0.001")
 
 # ---------------------------------------------------------------- retraction
-head("RETRACTION  (Fig. 2f)")
-pre_r, pre_n = 9, 11114          # preprinted: retractions / papers
-non_r, non_n = 813, 435159       # never preprinted
-r1, r2 = pre_r / pre_n * 1e4, non_r / non_n * 1e4
-rr = r2 / r1
-se = np.sqrt(1 / pre_r + 1 / non_r)
-_, p = fisher_exact([[pre_r, pre_n - pre_r], [non_r, non_n - non_r]], alternative="two-sided")
-line("retractions per 10,000, preprinted", f"{r1:.1f}", "8.1")
-line("retractions per 10,000, never preprinted", f"{r2:.1f}", "18.7")
-line("rate ratio (95% CI)",
-     f"{rr:.2f} ({np.exp(np.log(rr) - 1.96 * se):.2f}-{np.exp(np.log(rr) + 1.96 * se):.2f})",
-     "2.31 (1.20-4.45)")
-line("two-sided Fisher's exact test", f"P={p:.3f}", "P = 0.007")
+# The crude rate ratio reported in the original submission was replaced during
+# revision by a time-to-event analysis on an article-level cohort. That cohort
+# is not derived from full_corpus_labels.csv, so the values below are read from
+# the tables in revision/data/; revision/scripts/retraction_stratified_firth.R
+# regenerates them from revision/data/retraction_cohort.csv.gz.
+head("RETRACTION  (Fig. 2f, Suppl. Fig. 8)")
+arms = pd.read_csv(HERE / "revision" / "data" / "retraction_arm_summary.csv")
+cox = pd.read_csv(HERE / "revision" / "data" / "retraction_cox_results.csv")
+a = arms[arms.window == "2021-2024"].set_index("arm")
+
+line("articles, bioRxiv-linked", f"{a.loc['bioRxiv-linked', 'n']:,.0f}", "19,692")
+line("articles, not linked", f"{a.loc['not linked', 'n']:,.0f}", "380,236")
+line("retractions, bioRxiv-linked", f"{a.loc['bioRxiv-linked', 'events']:,.0f}", "6")
+line("retractions, not linked", f"{a.loc['not linked', 'events']:,.0f}", "715")
+line("rate per 10,000 article-years, linked",
+     f"{a.loc['bioRxiv-linked', 'rate_per_10k_yr']:.2f}", "0.79")
+line("rate per 10,000 article-years, not linked",
+     f"{a.loc['not linked', 'rate_per_10k_yr']:.2f}", "5.20")
+
+paper = {"Journal- and year-stratified": "0.22 (0.10-0.50)",
+         "Firth-penalized, journal- and year-stratified": "0.24 (0.10-0.48)"}
+for _, r in cox.iterrows():
+    line(f"HR, {r.model}", f"{r.hr:.2f} ({r.lo:.2f}-{r.hi:.2f})",
+         paper.get(r.model, ""))
 
 print()
