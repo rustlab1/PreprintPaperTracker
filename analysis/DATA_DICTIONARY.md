@@ -23,7 +23,7 @@
 | s1_hedging | Hedging shift of the first secondary claim. |
 | s2_label | Content change of the second secondary claim. |
 | s2_hedging | Hedging shift of the second secondary claim. |
-| source | Extraction batch identifier. |
+| source | Extraction batch. `full` (n = 69,634) carries single-pass Sonnet labels; `pilot` (n = 3,010) was labelled earlier and retains three-run majority labels. Both used the locked v7.1 prompt. Adjusted for posting year and field, pilot pairs are more likely to be labelled `unchanged` rather than `minor` (OR 1.51, 95% CI 1.41-1.63); the rate of `major` does not differ (OR 0.93, P = 0.28). Dropping the pilot rows moves the corpus distribution by 0.42, 0.39 and 0.03 percentage points for unchanged, minor and major. |
 
 Journal impact used in Figure 2e is the OpenAlex 2-year mean citedness, mapped
 from `published_journal` through `data/journal_metrics.json`.
