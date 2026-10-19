@@ -30,9 +30,6 @@ The final corpus contains 72,644 matched abstract pairs, posted between 2018 and
     findings.html          Interactive versions of the main figures
     data/                  Website data (index.json, detail shards, stats.json)
 
-    maintenance/           Ongoing updates to the website, separate from the paper
-      update_pending.py
-
 ## Reproduce
 
     cd analysis
@@ -49,14 +46,6 @@ The searchable site is served with GitHub Pages from the repository root:
 https://rustlab1.github.io/PreprintPaperTracker/ . `index.html` is the entry
 point, `findings.html` reproduces the figures interactively, and `browser.html`
 searches all 72,644 pairs.
-
-## Continuous updates
-
-bioRxiv continues to link older preprints to their journal articles.
-`maintenance/update_pending.py` harvests preprints published after the corpus
-cut-off and adds them to the website with a "Not assessed yet" tag. This keeps
-the browsable database current. It is separate from the analysis reported in the
-paper: it assigns no labels and changes no published result.
 
 ## Method summary
 
