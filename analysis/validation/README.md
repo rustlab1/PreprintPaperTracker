@@ -4,6 +4,9 @@ The label scheme was validated on a stratified subsample of 550 preprint-publica
 pairs. Each pair was labelled independently by four raters (H.Y., W.A., P.M.F. and
 R.R.) using the v7.1 codebook, blind to the model output, and by Claude Sonnet 4.6.
 
+Model labels for the content-change comparison were obtained as described in the Methods of the
+paper (validation paragraph); 544 of the 550 pairs have a model label.
+
 For content change, the rater consensus is the mean ordinal rating of the four raters
 (unchanged = 0, minor = 1, major = 2), binned at 0.5 and 1.5, with exact ties assigned
 to the more severe category. For hedging shift, the consensus is the majority vote;
@@ -17,7 +20,7 @@ rater labels are not included.
 
 ## Files
 
-    content_model_vs_consensus.csv   3x3 counts, model label vs rater consensus (n = 550)
+    content_model_vs_consensus.csv   3x3 counts, model label vs rater consensus (n = 544)
     content_rater_coincidence.csv    Krippendorff coincidence matrix across the 4 raters
     content_pairwise_kappa.csv       quadratic-weighted kappa for all 10 comparisons
                                      (6 rater-rater, 4 model-rater)

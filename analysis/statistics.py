@@ -55,7 +55,7 @@ line("categories with >= 1,500 pairs", int((cnt >= 1500).sum()), "17")
 # --------------------------------------------------------- content + hedging
 head("CONTENT CHANGE AND HEDGING SHIFT  (Fig. 1a-c)")
 pl = D.primary_label.value_counts(normalize=True) * 100
-for lab, paper in [("unchanged", "39.9%"), ("minor", "50.0%"), ("major", "10.2%")]:
+for lab, paper in [("unchanged", "39.8% (rounded to sum to 100%)"), ("minor", "50.0%"), ("major", "10.2%")]:
     line(f"primary claim {lab}", f"{pl[lab]:.1f}%", paper)
 
 h = D.primary_hedging

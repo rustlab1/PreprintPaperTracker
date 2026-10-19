@@ -67,8 +67,8 @@ cautious, unchanged, or more confident; claim type is one of mechanistic,
 associative, descriptive, methodological, therapeutic, or null result.
 Validation on a stratified subsample of 550 pairs, labelled independently by four
 raters, gave quadratic-weighted Cohen's kappa of 0.76 among the raters
-(Krippendorff's alpha 0.77), 0.76 between the model and the rater consensus, and
-0.67 between the model and individual raters. See `analysis/validation`. The full
+(Krippendorff's alpha 0.77), 0.75 between the model and the rater consensus, and
+0.69 between the model and individual raters. See `analysis/validation`. The full
 prompt and codebook are in `analysis/codebook`.
 
 ## Citation

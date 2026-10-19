@@ -81,18 +81,18 @@ rr = pk.loc[pk.type == "rater-rater", "kappa_quadratic"]
 mr = pk.loc[pk.type == "model-rater", "kappa_quadratic"]
 k_bin, ac1_bin = kappa_and_ac1_binary(collapse_major(cm))
 
-print(f"\nCONTENT CHANGE  (n = {n} pairs, 4 raters)")
+print(f"\nCONTENT CHANGE  (model vs raters: n = {n} pairs; rater-rater: 550 pairs)")
 line("rater-rater kappa (quadratic), mean", f"{rr.mean():.2f}", "0.76")
 line("  range across the 6 rater pairs", f"{rr.min():.2f}-{rr.max():.2f}", "0.70-0.82")
 line("Krippendorff's alpha (ordinal)", f"{alpha_ordinal(coin):.2f}", "0.77")
-line("model vs consensus, kappa (quadratic)", f"{kappa_quadratic(cm):.2f}", "0.76")
-line("model vs individual raters, mean kappa", f"{mr.mean():.2f}", "0.67")
+line("model vs consensus, kappa (quadratic)", f"{kappa_quadratic(cm):.2f}", "0.75")
+line("model vs individual raters, mean kappa", f"{mr.mean():.2f}", "0.69")
 line("all 10 comparisons >= 0.61", str(bool((pk.kappa_quadratic >= 0.61).all())), "True")
-line("within one ordinal level of consensus", f"{100 * (n - two_level) / n:.1f}%", "98.9%")
-line("two-level discordant (unchanged vs major)", f"{two_level} ({100 * two_level / n:.1f}%)", "6 (1.1%)")
-line("major-vs-non-major: kappa / AC1", f"{k_bin:.2f}/{ac1_bin:.2f}", "0.70 / 0.76")
-line("model called major, 0 of 4 raters did", f"{cal.pct_model_called_major.iloc[0]:.0f}%", "12%")
-line("model called major, 4 of 4 raters did", f"{cal.pct_model_called_major.iloc[4]:.0f}%", "93%")
+line("within one ordinal level of consensus", f"{100 * (n - two_level) / n:.1f}%", "98.7%")
+line("two-level discordant (unchanged vs major)", f"{two_level} ({100 * two_level / n:.1f}%)", "7 (1.3%)")
+line("major-vs-non-major: kappa / AC1", f"{k_bin:.2f}/{ac1_bin:.2f}", "not reported")
+line("model called major, 0 of 4 raters did", f"{cal.pct_model_called_major.iloc[0]:.0f}%", "5%")
+line("model called major, 4 of 4 raters did", f"{cal.pct_model_called_major.iloc[4]:.0f}%", "100%")
 
 # ------------------------------------------------------------------ hedging
 hm = pd.read_csv(HERE / "hedging_model_vs_consensus.csv", index_col=0).values
