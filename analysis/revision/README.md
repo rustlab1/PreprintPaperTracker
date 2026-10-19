@@ -8,10 +8,10 @@ weighted linear fit of revision against journal impact.
 
 | Analysis | Figure | Files |
 |---|---|---|
-| Retraction cohort, Cox and stratified Firth | Fig. 2f, Suppl. Fig. 8 | `scripts/retraction_stratified_firth.R`, `data/retraction_*` |
+| Retraction cohort, Cox and stratified Firth | Fig. 2e, Suppl. Fig. 8 | `scripts/retraction_stratified_firth.R`, `data/retraction_*` |
 | Calendar-time fixed-window sensitivity | Suppl. Fig. 5 | `scripts/calendar_fixed_window.R`, `data/fixed_window_*` |
 | Interval, fractional polynomial | Suppl. Fig. 6 | `fp_interval.py` |
-| Journal impact, fractional polynomial | Fig. 2e | `scripts/journal_impact_fp.R`, `data/journal_impact_*` |
+| Journal impact, fractional polynomial | Fig. 2d | `scripts/journal_impact_fp.R`, `data/journal_impact_*` |
 
 `fp_interval.py` runs end to end from `../data/full_corpus_labels.csv` and
 prints each value next to the number reported in the paper. The R scripts are
@@ -32,7 +32,7 @@ both groups are represented (n = 399,928; 721 retractions).
     retraction_cox_results.csv    hazard ratios for every specification in Suppl. Fig. 8a
     retraction_arm_summary.csv    events, person-time and rates by arm and window
     retraction_events.csv         the retracted articles
-    retraction_km_curve.csv       cumulative incidence underlying Fig. 2f
+    retraction_km_curve.csv       cumulative incidence underlying Fig. 2e
 
 Note on `retraction_cox_results.csv`: the `p_type` column records which test each
 P value comes from. The Firth row is a penalised likelihood-ratio P value and the
@@ -53,8 +53,8 @@ Major-revision rate by posting year, restricted to pairs published within 365 or
 dataset's coverage (1 January 2021 to 28 February 2025).
 
     fixed_window_models.csv   odds ratio per posting year for each window
-    fixed_window_rates.csv    yearly rates for each series in Suppl. Fig. 5b
-    interval_summary.csv      median and IQR of the interval by posting year
+    fixed_window_rates.csv    yearly rates for each series in Suppl. Fig. 5c
+    interval_summary.csv      median and 25th to 75th percentile of the interval by posting year
 
 ## Fractional polynomials
 

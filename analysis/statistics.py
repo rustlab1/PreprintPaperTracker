@@ -48,7 +48,7 @@ def head(t):
 head("CORPUS")
 line("matched preprint-publication pairs", f"{len(D):,}", "72,644")
 line("unique journals", f"{D.journal.nunique():,}", "3,149")
-line("bioRxiv subject categories", D.preprint_category.nunique(), "25")
+line("bioRxiv subject categories", D.preprint_category.nunique(), "27")
 cnt = D.groupby("preprint_category").size()
 line("categories with >= 1,500 pairs", int((cnt >= 1500).sum()), "17")
 
@@ -126,7 +126,7 @@ c2, p, dof, _ = chi2_contingency(pd.crosstab(s1.primary_label, s1.s1_label))
 line("chi-squared test", f"chi2({dof})={c2:.0f}", "P < 0.01")
 
 # ----------------------------------------------------------------- temporal
-head("POSTING YEAR  (Fig. 2c, Suppl. Fig. 4)")
+head("POSTING YEAR  (Suppl. Fig. 5)")
 yr = D[D.yr.between(2018, 2024)].groupby("yr").maj.agg([("n", "size"), ("pct", lambda x: 100 * x.mean())])
 for y in [2018, 2019, 2024]:
     line(f"major revision, posted {y}", f"{yr.loc[y, 'pct']:.1f}% (n={int(yr.loc[y, 'n'])})",
@@ -148,10 +148,10 @@ o, p = or_year(D)
 line("OR per year, unrestricted", f"{o:.2f}", "0.79")
 for W in [365, 730]:
     o, p = or_year(D[D.days <= W])
-    line(f"OR per year, published within {W} d", f"{o:.2f}", "0.80")
+    line(f"OR per year, published within {W} d", f"{o:.2f}", "not reported (fixed-window ORs: revision/)")
 
 # ---------------------------------------------------------------- intervals
-head("PREPRINT-TO-PUBLICATION INTERVAL  (Fig. 2d, Suppl. Fig. 5)")
+head("PREPRINT-TO-PUBLICATION INTERVAL  (Fig. 2c, Suppl. Fig. 7)")
 dd = D.dropna(subset=["days"]).copy()
 dd["tertile"] = pd.qcut(dd.days, 3, labels=["fastest", "middle", "slowest"])
 t = dd.groupby("tertile", observed=True).agg(med=("days", "median"), pct=("maj", lambda x: 100 * x.mean()))
@@ -168,7 +168,7 @@ line("major revision excluding <90 d",
      f"{100 * dd.loc[dd.days > 90, 'maj'].mean():.1f}%", "10.7% (from 10.2%)")
 
 # ------------------------------------------------------------ journal impact
-head("JOURNAL IMPACT  (Fig. 2e)")
+head("JOURNAL IMPACT  (Fig. 2d)")
 jm = json.loads((HERE / "data" / "journal_metrics.json").read_text())
 imp = {k: v.get("2yr_mean_citedness") for k, v in jm.items() if isinstance(v, dict)}
 imp = {k: v for k, v in imp.items() if v and v > 0}
@@ -216,7 +216,7 @@ line("FP2 vs linear", f"chi2={gstat:.1f}, P={chi2.sf(gstat, 1):.3g}", "P < 0.001
 # is not derived from full_corpus_labels.csv, so the values below are read from
 # the tables in revision/data/; revision/scripts/retraction_stratified_firth.R
 # regenerates them from revision/data/retraction_cohort.csv.gz.
-head("RETRACTION  (Fig. 2f, Suppl. Fig. 8)")
+head("RETRACTION  (Fig. 2e, Suppl. Fig. 8)")
 arms = pd.read_csv(HERE / "revision" / "data" / "retraction_arm_summary.csv")
 cox = pd.read_csv(HERE / "revision" / "data" / "retraction_cox_results.csv")
 a = arms[arms.window == "2021-2024"].set_index("arm")
